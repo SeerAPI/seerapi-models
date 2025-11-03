@@ -365,6 +365,11 @@ class SkillEffectInUseORM(SkillEffectInUseBase, table=True):
             'secondary': 'skilleffectlink',
         }
     )
+    friend_skill: list['SkillORM'] = Relationship(
+        sa_relationship_kwargs={
+            'secondary': 'skillfriendskilleffectlink',
+        }
+    )
     gem: list['GemORM'] = Relationship(
         back_populates='skill_effect_in_use',
         sa_relationship_kwargs={

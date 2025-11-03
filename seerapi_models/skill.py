@@ -25,6 +25,15 @@ class SkillEffectLink(SQLModel, table=True):
     )
 
 
+class SkillFriendSkillEffectLink(SQLModel, table=True):
+    """伙伴系统强化技能效果链接表"""
+
+    skill_id: int | None = Field(default=None, foreign_key='skill.id', primary_key=True)
+    effect_in_use_id: int | None = Field(
+        default=None, foreign_key='skill_effect_in_use.id', primary_key=True
+    )
+
+
 class EffectParamLink(SQLModel, table=True):
     """技能效果参数链接表"""
 
@@ -317,7 +326,7 @@ class SkillORM(SkillBase, table=True):
         back_populates='skill', link_model=SkillEffectLink
     )
     friend_skill_effect: list[SkillEffectInUseORM] = Relationship(
-        back_populates='skill', link_model=SkillEffectLink
+        back_populates='skill', link_model=SkillFriendSkillEffectLink
     )
     hide_effect_id: int | None = Field(default=None, foreign_key='skill_hide_effect.id')
     hide_effect: SkillHideEffectORM | None = Relationship(back_populates='skill')
