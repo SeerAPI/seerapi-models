@@ -122,9 +122,12 @@ class ApiResourceList(BaseGeneralModel, Generic[TResModel]):
 
 
 class EidEffect(BaseResModel, BaseGeneralModel, ConvertToORM['EidEffectORM']):
-    info: str | None = Field(
-        default=None,
-        description='效果描述，当效果描述为空时，该字段为null',
+    # info: str | None = Field(
+    #     default=None,
+    #     description='效果描述，当效果描述为空时，该字段为null',
+    # )
+    args_num: int = Field(
+        description='效果需要的参数数量，该值是从使用该效果的资源中推测得出的'
     )
 
     @classmethod
@@ -140,10 +143,7 @@ class EidEffect(BaseResModel, BaseGeneralModel, ConvertToORM['EidEffectORM']):
         return EidEffectORM
 
     def to_orm(self) -> 'EidEffectORM':
-        return EidEffectORM(
-            id=self.id,
-            info=self.info,
-        )
+        return EidEffectORM(id=self.id, args_num=self.args_num)
 
 
 class EidEffectORM(EidEffect, table=True):
