@@ -18,22 +18,6 @@ from .element_type import (
     TypeCombination,
     TypeCombinationORM,
 )
-from .equip import (
-    Equip,
-    EquipBonus,
-    EquipBonusAttrORM,
-    EquipBonusORM,
-    EquipEffectiveOccasion,
-    EquipEffectiveOccasionORM,
-    EquipORM,
-    EquipType,
-    EquipTypeORM,
-    Suit,
-    SuitBonus,
-    SuitBonusAttrORM,
-    SuitBonusORM,
-    SuitORM,
-)
 from .items import (
     EnergyBead,
     EnergyBeadBuffAttrORM,
@@ -48,6 +32,30 @@ from .items import (
     SkillStoneEffect,
     SkillStoneEffectORM,
     SkillStoneORM,
+    Equip,
+    EquipBonus,
+    EquipBonusAttrORM,
+    EquipBonusORM,
+    EquipEffectiveOccasion,
+    EquipEffectiveOccasionORM,
+    EquipORM,
+    EquipType,
+    EquipTypeORM,
+    Suit,
+    SuitBonus,
+    SuitBonusAttrORM,
+    SuitBonusORM,
+    SuitORM,
+    Gem,
+    GemCategory,
+    GemCategoryORM,
+    GemGen1,
+    GemGen1PartORM,
+    GemGen2,
+    GemGen2PartORM,
+    GemGenCategory,
+    GemGenCategoryORM,
+    GemORM,
 )
 from .metadata import ApiMetadata, ApiMetadataORM
 from .mintmark import (
@@ -69,18 +77,6 @@ from .mintmark import (
     SkillPartORM,
     UniversalMintmark,
     UniversalPartORM,
-)
-from .mintmark_gem import (
-    Gem,
-    GemCategory,
-    GemCategoryORM,
-    GemGen1,
-    GemGen1PartORM,
-    GemGen2,
-    GemGen2PartORM,
-    GemGenCategory,
-    GemGenCategoryORM,
-    GemORM,
 )
 from .pet import (
     BaseStatORM,

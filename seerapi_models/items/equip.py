@@ -17,9 +17,10 @@ from seerapi_models.common import (
     SixAttributes,
     SixAttributesORM,
 )
+from seerapi_models.items._common import Item, ItemORM
 
 if TYPE_CHECKING:
-    from .pet import Pet, PetORM
+    from seerapi_models.pet import Pet, PetORM
 
 
 class SuitBonusAttrORM(SixAttributesORM, table=True):
@@ -253,7 +254,8 @@ class SuitORM(SuitBase, table=True):
 
 
 class EquipBase(BaseResModel):
-    name: str = Field(description='名称')
+    id: int = Field(primary_key=True, foreign_key='item.id', description='部件ID')
+    name: str = Field(description='部件名称')
     speed: float | None = Field(
         default=None, description='部件速度移动加成，一般只有脚部部件提供'
     )
@@ -264,6 +266,7 @@ class EquipBase(BaseResModel):
 
 
 class Equip(EquipBase, ConvertToORM['EquipORM']):
+    item: ResourceRef['Item'] = Field(description='装备部件物品资源引用')
     bonus: EquipBonus | None = Field(
         default=None, description='部件效果，仅当该部件为能力加成部件时有效'
     )
@@ -320,6 +323,8 @@ class EquipORM(EquipBase, table=True):
     pk_hp: int | None = Field(default=None)
     pk_atk: int | None = Field(default=None)
     pk_fire_range: int | None = Field(default=None)
+
+    item: 'ItemORM' = Relationship(back_populates='equip')
 
 
 class EquipTypeBase(BaseCategoryModel):

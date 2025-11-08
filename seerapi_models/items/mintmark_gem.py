@@ -4,6 +4,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import BaseCategoryModel, BaseResModel, ConvertToORM
 from seerapi_models.common import ResourceRef, SkillEffectInUse, SkillEffectInUseORM
+from seerapi_models.items import Item, ItemORM
 
 
 class GemEffectLink(SQLModel, table=True):
@@ -14,6 +15,7 @@ class GemEffectLink(SQLModel, table=True):
 
 
 class GemBase(BaseResModel):
+    id: int = Field(primary_key=True, foreign_key='item.id', description='宝石ID')
     name: str = Field(description='宝石名称')
     level: int = Field(description='宝石等级')
     generation_id: int = Field(
@@ -32,6 +34,7 @@ class GemResRefs(SQLModel):
     )
     category: ResourceRef['GemCategory'] = Field(description='宝石类型引用')
     effect: list[SkillEffectInUse] = Field(description='宝石效果')
+    item: ResourceRef['Item'] = Field(description='宝石物品资源引用')
 
 
 class Gem(GemBase, GemResRefs, ConvertToORM['GemORM']):
@@ -89,6 +92,7 @@ class Gem(GemBase, GemResRefs, ConvertToORM['GemORM']):
             'category': self.category,
             'effect': self.effect,
             'next_level_gem': self.next_level_gem,
+            'item': self.item,
         }
         if self.generation_id == 1:
             return GemGen1(
@@ -151,6 +155,8 @@ class GemORM(GemBase, table=True):
             'primaryjoin': 'GemORM.id == GemGen2PartORM.id',
         },
     )
+
+    item: 'ItemORM' = Relationship(back_populates='gem')
 
 
 class GemGen1PartORM(BaseResModel, table=True):

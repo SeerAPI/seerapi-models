@@ -26,9 +26,13 @@ from .build_model import (
 
 if TYPE_CHECKING:
     from .effect import PetEffectORM, VariationEffectORM
-    from .equip import EquipBonusORM, SuitBonusORM
-    from .items import EnergyBeadORM, SkillStoneEffectORM
-    from .mintmark_gem import GemORM
+    from .items import (
+        EnergyBeadORM,
+        SkillStoneEffectORM,
+        GemORM,
+        EquipBonusORM,
+        SuitBonusORM,
+    )
     from .pet import SoulmarkORM
     from .skill import SkillEffectType, SkillEffectTypeORM, SkillORM
 
