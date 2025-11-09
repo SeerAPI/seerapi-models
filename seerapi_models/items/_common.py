@@ -7,15 +7,17 @@ from seerapi_models.common import ResourceRef
 
 if TYPE_CHECKING:
     from .enegry_bead import EnergyBeadORM
-    from .skill_activation_item import SkillActivationItemORM
-    from .skill_stone import SkillStoneORM
     from .equip import EquipORM
     from .mintmark_gem import GemORM
+    from .skill_activation_item import SkillActivationItemORM
+    from .skill_stone import SkillStoneORM
 
 
 class ItemBase(BaseResModel):
     name: str = Field(description='物品名称')
-    desc: str | None = Field(default=None, description='物品描述，可能为空（在游戏内显示为默认描述）')
+    desc: str | None = Field(
+        default=None, description='物品描述，可能为空（在游戏内显示为默认描述）'
+    )
     max: int = Field(description='物品最大数量')
 
     @classmethod

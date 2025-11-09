@@ -28,9 +28,9 @@ if TYPE_CHECKING:
     from .effect import PetEffectORM, VariationEffectORM
     from .items import (
         EnergyBeadORM,
-        SkillStoneEffectORM,
-        GemORM,
         EquipBonusORM,
+        GemORM,
+        SkillStoneEffectORM,
         SuitBonusORM,
     )
     from .pet import SoulmarkORM

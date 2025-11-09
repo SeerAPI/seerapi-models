@@ -12,10 +12,10 @@ from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
 
 if TYPE_CHECKING:
     from seerapi_models.element_type import TypeCombination, TypeCombinationORM
-    from seerapi_models.equip import SuitBonusORM
     from seerapi_models.items import (
         SkillActivationItem,
         SkillActivationItemORM,
+        SuitBonusORM,
     )
     from seerapi_models.mintmark import MintmarkORM
     from seerapi_models.skill import Skill, SkillORM
