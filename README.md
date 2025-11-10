@@ -2,6 +2,18 @@
 
 SeerAPI 数据模型/ORM 定义，用于前后端开发。
 
+## 安装
+使用 uv：
+
+```bash
+uv add seerapi-models
+```
+或者使用 pip：
+
+```bash
+pip install seerapi-models
+```
+也可以使用其他包管理器，如 poetry 等。
 ## 开发环境部署
 
 ### 使用 uv 部署
@@ -58,4 +70,8 @@ SeerAPI 数据模型/ORM 定义，用于前后端开发。
 ### 环境要求
 
 - Python >= 3.10
-- uv >= 0.9.0 (推荐使用最新版本)
+- uv >= 0.9.0 (推荐使用最新版)
+
+## 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
