@@ -14,6 +14,25 @@ uv add seerapi-models
 pip install seerapi-models
 ```
 也可以使用其他包管理器，如 poetry 等。
+
+## 使用
+
+```python
+from seerapi_models import Item, ItemORM, ItemCategory, ResourceRef
+
+category_ref = ResourceRef.from_model(ItemCategory, id=1) # 定义物品分类字段引用
+item = Item(
+    id=1,
+    name="Item 1",
+    max=100,
+    category=catgeory_ref
+)
+
+print(item.name)
+
+assert isinstance(item.to_orm(), ItemORM) # 转换为 ORM 模型
+```
+
 ## 开发环境部署
 
 ### 使用 uv 部署
