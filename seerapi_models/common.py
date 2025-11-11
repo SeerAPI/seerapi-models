@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 import inspect
 from typing import (
     TYPE_CHECKING,
@@ -12,6 +13,7 @@ from typing_extensions import Self
 from pydantic import (
     ConfigDict,
     computed_field,
+    field_serializer,
 )
 from sqlalchemy.orm import column_property, declared_attr
 from sqlmodel import JSON, Column, Computed, Field, Integer, Relationship
@@ -36,6 +38,8 @@ if TYPE_CHECKING:
     from .pet import SoulmarkORM
     from .skill import SkillEffectType, SkillEffectTypeORM, SkillORM
 
+BASE_DATA_URL = 'you_should_set_this_url.example.com'
+
 
 TResModel = TypeVar('TResModel', bound=BaseResModel)
 _TResModelArg = TypeVar('_TResModelArg', bound=BaseResModel)
@@ -44,34 +48,42 @@ _TResModelArg = TypeVar('_TResModelArg', bound=BaseResModel)
 class ResourceRef(BaseGeneralModel, Generic[TResModel]):
     """API资源类"""
 
-    base_data_url: ClassVar[str] = ''
+    base_data_url: ClassVar[str] = BASE_DATA_URL
 
     id: int = Field(description='资源ID')
-    resource_name: str = Field(description='资源类型名称', exclude=True)
-    path: str = Field(default='', description='资源路径', exclude=True)
+    url: str = Field(description='资源URL')
 
-    @computed_field(description='资源URL')
-    @property
-    def url(self) -> str:
-        path_parts: list[str] = [
-            self.base_data_url,
-            self.resource_name,
-            str(self.id),
-            self.path,
-        ]
-        return '/'.join(path_parts)
+    @field_serializer('url', mode='plain')
+    def _serialize_url(self, url: str) -> str:
+        return url.replace(BASE_DATA_URL, self.base_data_url.removesuffix('/'))
 
     @classmethod
     def schema_path(cls) -> str:
         return 'common/resource_ref/'
+
+    @classmethod
+    def from_res_name(
+        cls,
+        id: int,
+        resource_name: str,
+        sub_path: str | None = None,
+    ) -> Self:
+        path_parts = filter(
+            bool,
+            [
+                cls.base_data_url,
+                resource_name,
+                str(id),
+                sub_path,
+            ],
+        )
+        return cls(id=id, url='/'.join(cast(Iterable[str], path_parts)))
 
     @overload
     @classmethod
     def from_model(
         cls,
         model: _TResModelArg,
-        *,
-        resource_name: str | None = None,
     ) -> 'ResourceRef[_TResModelArg]': ...
 
     @overload
@@ -81,7 +93,6 @@ class ResourceRef(BaseGeneralModel, Generic[TResModel]):
         model: type[_TResModelArg],
         *,
         id: int,
-        resource_name: str | None = None,
     ) -> 'ResourceRef[_TResModelArg]': ...
 
     @classmethod
@@ -90,15 +101,13 @@ class ResourceRef(BaseGeneralModel, Generic[TResModel]):
         model: type[_TResModelArg] | _TResModelArg,
         *,
         id: int | None = None,
-        resource_name: str | None = None,
     ) -> 'ResourceRef[_TResModelArg]':
         if not inspect.isclass(model):
             id = model.id
         if id is None:
             raise ValueError('id is required')
 
-        resource_name = resource_name or model.resource_name()
-        obj = cls(id=id, resource_name=resource_name)
+        obj = cls.from_res_name(id=id, resource_name=model.resource_name())
         return cast(ResourceRef[_TResModelArg], obj)
 
 
@@ -108,6 +117,62 @@ class NamedResourceRef(ResourceRef[TResModel]):
     @classmethod
     def schema_path(cls) -> str:
         return 'common/named_resource_ref/'
+
+    @classmethod
+    def from_res_name(
+        cls,
+        id: int,
+        resource_name: str,
+        sub_path: str | None = None,
+        *,
+        name: str | None = None,
+    ) -> Self:
+        path_parts: list[str] = [
+            cls.base_data_url,
+            resource_name,
+            str(id),
+        ]
+        if sub_path:
+            path_parts.append(sub_path)
+        return cls(id=id, url='/'.join(path_parts), name=name)
+
+    @overload
+    @classmethod
+    def from_model(
+        cls,
+        model: _TResModelArg,
+        *,
+        name: str | None = None,
+    ) -> 'NamedResourceRef[_TResModelArg]': ...
+
+    @overload
+    @classmethod
+    def from_model(
+        cls,
+        model: type[_TResModelArg],
+        *,
+        id: int,
+        name: str | None = None,
+    ) -> 'NamedResourceRef[_TResModelArg]': ...
+
+    @classmethod
+    def from_model(
+        cls,
+        model: type[_TResModelArg] | _TResModelArg,
+        *,
+        id: int | None = None,
+        name: str | None = None,
+    ) -> 'NamedResourceRef[_TResModelArg]':
+        if not inspect.isclass(model):
+            id = model.id
+            # 尝试从模型实例中获取name属性
+            if name is None and hasattr(model, 'name'):
+                name = getattr(model, 'name')
+        if id is None:
+            raise ValueError('id is required')
+
+        obj = cls.from_res_name(id=id, resource_name=model.resource_name(), name=name)
+        return cast(NamedResourceRef[_TResModelArg], obj)
 
 
 class ApiResourceList(BaseGeneralModel, Generic[TResModel]):
