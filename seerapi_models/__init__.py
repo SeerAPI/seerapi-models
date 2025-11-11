@@ -43,6 +43,8 @@ from .items import (
     GemORM,
     Item,
     ItemORM,
+    ItemCategory,
+    ItemCategoryORM,
     SkillActivationItem,
     SkillActivationItemORM,
     SkillStone,
@@ -125,6 +127,7 @@ from .skill import (
     SkillHideEffectORM,
     SkillORM,
 )
+from .common import EidEffect
 
 __all__ = [
     'AbilityMintmark',
@@ -151,6 +154,7 @@ __all__ = [
     'EquipORM',
     'EquipType',
     'EquipTypeORM',
+    'EidEffect',
     'Gem',
     'GemCategory',
     'GemCategoryORM',
@@ -163,6 +167,8 @@ __all__ = [
     'GemORM',
     'Item',
     'ItemORM',
+    'ItemCategory',
+    'ItemCategoryORM',
     'Mintmark',
     'MintmarkBaseAttrORM',
     'MintmarkClassCategory',
