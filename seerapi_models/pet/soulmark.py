@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional
 
+from pydantic import AliasChoices
 from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import (
@@ -58,7 +59,10 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
     )
     from_: ResourceRef['Soulmark'] | None = Field(
         description='魂印资源，该字段仅在该魂印是强化/觉醒魂印时有效',
-        schema_extra={'serialization_alias': 'from'},
+        schema_extra={
+            'serialization_alias': 'from',
+            'validation_alias': AliasChoices('from', 'from_'),
+        },
     )
 
     @classmethod

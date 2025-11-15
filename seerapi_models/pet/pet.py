@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Optional, cast
 
 from pydantic import BaseModel
-from sqlmodel import Field, Integer, Relationship, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import (
     BaseCategoryModel,
@@ -112,20 +112,7 @@ class DiyStatsRange(BaseModel):
         )
 
 
-class SkillInPetBase(BaseResModel):
-    id: int = Field(
-        exclude=True,
-        primary_key=True,
-        foreign_key='skill.id',
-        sa_type=Integer,
-        sa_column_kwargs={
-            'name': 'skill_id',
-        },
-        schema_extra={
-            'serialization_alias': 'skill_id',
-        },
-    )
-    pet_id: int = Field(primary_key=True, foreign_key='pet.id', exclude=True)
+class SkillInPetBase(SQLModel):
     learning_level: int | None = Field(
         default=None,
         description='技能的学习等级，当该技能无法通过升级获得时，该字段为null',
@@ -139,32 +126,17 @@ class SkillInPetBase(BaseResModel):
         return 'skill_in_pet'
 
 
-class SkillInPet(SkillInPetBase, ConvertToORM['SkillInPetORM']):
+class SkillInPet(SkillInPetBase):
     skill: ResourceRef['Skill'] = Field(description='技能资源')
     skill_activation_item: ResourceRef['SkillActivationItem'] | None = Field(
         default=None, description='学习该技能需要的激活道具'
     )
 
-    @classmethod
-    def get_orm_model(cls) -> type['SkillInPetORM']:
-        return SkillInPetORM
-
-    def to_orm(self) -> 'SkillInPetORM':
-        return SkillInPetORM(
-            id=self.id,
-            pet_id=self.pet_id,
-            learning_level=self.learning_level,
-            is_special=self.is_special,
-            is_advanced=self.is_advanced,
-            is_fifth=self.is_fifth,
-            skill_activation_item_id=(
-                self.skill_activation_item.id if self.skill_activation_item else None
-            ),
-        )
-
 
 class SkillInPetORM(SkillInPetBase, table=True):
+    skill_id: int = Field(primary_key=True, foreign_key='skill.id')
     skill: 'SkillORM' = Relationship(back_populates='pet_links')
+    pet_id: int = Field(primary_key=True, foreign_key='pet.id')
     pet: 'PetORM' = Relationship(back_populates='skill_links')
     skill_activation_item_id: int | None = Field(
         default=None,
@@ -247,7 +219,21 @@ class Pet(PetBase, ConvertToORM['PetORM']):
             **self.yielding_ev.model_dump(),
         )
         diy_stats = self.diy_stats.to_orm(self.id) if self.diy_stats else None
-        skill_links = [skill.to_orm() for skill in self.skill]
+        skill_links = [
+            SkillInPetORM(
+                skill_id=skill.skill.id,
+                pet_id=self.id,
+                learning_level=skill.learning_level,
+                is_special=skill.is_special,
+                is_advanced=skill.is_advanced,
+                is_fifth=skill.is_fifth,
+                skill_activation_item_id=(
+                    skill.skill_activation_item.id
+                    if skill.skill_activation_item else None
+                ),
+            )
+            for skill in self.skill
+        ]
         return PetORM(
             id=self.id,
             name=self.name,

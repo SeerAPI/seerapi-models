@@ -11,6 +11,7 @@ from typing import (
 from typing_extensions import Self
 
 from pydantic import (
+    AliasChoices,
     ConfigDict,
     computed_field,
     field_serializer,
@@ -274,7 +275,10 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
         sa_type=Integer,
         sa_column_kwargs={'name': 'def', 'nullable': False},
         description='防御',
-        schema_extra={'serialization_alias': 'def'},
+        schema_extra={
+            'serialization_alias': 'def',
+            'validation_alias': AliasChoices('def', 'def_'),
+        },
     )
     sp_atk: int = Field(description='特攻')
     sp_def: int = Field(description='特防')

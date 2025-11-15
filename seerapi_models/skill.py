@@ -13,7 +13,7 @@ from .common import ResourceRef, SkillEffectInUse, SkillEffectInUseORM
 if TYPE_CHECKING:
     from .element_type import TypeCombination, TypeCombinationORM
     from .mintmark import MintmarkORM
-    from .pet import SkillInPetORM
+    from .pet import SkillInPetORM, Pet
 
 
 class SkillEffectLink(SQLModel, table=True):
@@ -271,7 +271,7 @@ class SkillBase(BaseResModel):
 class Skill(SkillBase, ConvertToORM['SkillORM']):
     category: ResourceRef[SkillCategory] = Field(description='技能分类')
     type: ResourceRef['TypeCombination'] = Field(description='技能属性')
-    learned_by_pet: list[ResourceRef] = Field(
+    learned_by_pet: list[ResourceRef['Pet']] = Field(
         default_factory=list, description='可学习该技能的精灵列表'
     )
     skill_effect: list[SkillEffectInUse] = Field(

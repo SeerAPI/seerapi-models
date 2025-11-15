@@ -71,10 +71,6 @@ class SkillMintmarkEffect(BaseModel):
 class MintmarkBase(BaseResModel):
     name: str = Field(description='名称')
     desc: str = Field(description='刻印描述')
-    rarity_id: int = Field(
-        foreign_key='mintmark_rarity.id',
-        exclude=True,
-    )
 
 
 class MintmarkResRefs(SQLModel):
@@ -276,7 +272,7 @@ class Mintmark(MintmarkBase, MintmarkResRefs, ConvertToORM['MintmarkORM']):
             name=self.name,
             desc=self.desc,
             type_id=type_id,
-            rarity_id=self.rarity_id,
+            rarity_id=self.rarity.id,
             **part_kwargs,
         )
 
@@ -287,7 +283,6 @@ class Mintmark(MintmarkBase, MintmarkResRefs, ConvertToORM['MintmarkORM']):
             'desc': self.desc,
             'pet': self.pet,
             'rarity': self.rarity,
-            'rarity_id': self.rarity_id,
             'type': self.type,
         }
         if self.type.id == 0:

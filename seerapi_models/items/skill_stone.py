@@ -29,29 +29,14 @@ class SkillStoneEffectLink(SQLModel, table=True):
 
 class SkillStoneEffectBase(BaseResModelWithOptionalId):
     prob: float = Field(description='技能石效果激活概率，0到1之间')
-    skill_stone_id: int = Field(
-        description='技能石ID', foreign_key='skill_stone.id', exclude=True
-    )
 
     @classmethod
     def resource_name(cls) -> str:
         return 'skill_stone_effect'
 
 
-class SkillStoneEffect(SkillStoneEffectBase, ConvertToORM['SkillStoneEffectORM']):
+class SkillStoneEffect(SkillStoneEffectBase):
     effect: list['SkillEffectInUse'] = Field(description='技能石效果列表')
-
-    @classmethod
-    def get_orm_model(cls) -> type['SkillStoneEffectORM']:
-        return SkillStoneEffectORM
-
-    def to_orm(self) -> 'SkillStoneEffectORM':
-        return SkillStoneEffectORM(
-            id=self.id,
-            prob=self.prob,
-            skill_stone_id=self.skill_stone_id,
-            effect=[effect.to_orm() for effect in self.effect],
-        )
 
 
 class SkillStoneEffectORM(SkillStoneEffectBase, table=True):
@@ -59,6 +44,7 @@ class SkillStoneEffectORM(SkillStoneEffectBase, table=True):
         back_populates='skill_stone_effect',
         link_model=SkillStoneEffectLink,
     )
+    skill_stone_id: int = Field(foreign_key='skill_stone.id')
     skill_stone: 'SkillStoneORM' = Relationship(back_populates='effect')
 
 
@@ -85,6 +71,15 @@ class SkillStone(SkillStoneBase, ConvertToORM['SkillStoneORM']):
         return SkillStoneORM
 
     def to_orm(self) -> 'SkillStoneORM':
+        effect_orms = [
+            SkillStoneEffectORM(
+                id=effect.id,
+                prob=effect.prob,
+                skill_stone_id=self.id,
+                effect=[e.to_orm() for e in effect.effect],
+            )
+            for effect in self.effect
+        ]
         return SkillStoneORM(
             id=self.id,
             name=self.name,
@@ -93,6 +88,7 @@ class SkillStone(SkillStoneBase, ConvertToORM['SkillStoneORM']):
             max_pp=self.max_pp,
             accuracy=self.accuracy,
             category_id=self.category.id,
+            effect=effect_orms,
         )
 
 
