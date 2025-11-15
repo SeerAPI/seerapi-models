@@ -4,6 +4,7 @@ from .battle_effect import (
     BattleEffectCategoryORM,
     BattleEffectORM,
 )
+from .common import EidEffect, SkillEffectInUse
 from .effect import (
     PetEffect,
     PetEffectGroup,
@@ -42,9 +43,9 @@ from .items import (
     GemGenCategoryORM,
     GemORM,
     Item,
-    ItemORM,
     ItemCategory,
     ItemCategoryORM,
+    ItemORM,
     SkillActivationItem,
     SkillActivationItemORM,
     SkillStone,
@@ -127,7 +128,13 @@ from .skill import (
     SkillHideEffectORM,
     SkillORM,
 )
-from .common import EidEffect
+
+SkillEffectInUse.model_rebuild(
+    force=True,
+    _parent_namespace_depth=2,
+    _types_namespace={'SkillEffectType': SkillEffectType},
+)
+Skill.model_rebuild()
 
 __all__ = [
     'AbilityMintmark',
@@ -140,6 +147,7 @@ __all__ = [
     'BattleEffectCategoryORM',
     'BattleEffectORM',
     'DiyStatsRangeORM',
+    'EidEffect',
     'ElementType',
     'ElementTypeORM',
     'EnergyBead',
@@ -154,7 +162,6 @@ __all__ = [
     'EquipORM',
     'EquipType',
     'EquipTypeORM',
-    'EidEffect',
     'Gem',
     'GemCategory',
     'GemCategoryORM',
@@ -166,9 +173,9 @@ __all__ = [
     'GemGenCategoryORM',
     'GemORM',
     'Item',
-    'ItemORM',
     'ItemCategory',
     'ItemCategoryORM',
+    'ItemORM',
     'Mintmark',
     'MintmarkBaseAttrORM',
     'MintmarkClassCategory',
