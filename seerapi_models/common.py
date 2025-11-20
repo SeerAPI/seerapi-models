@@ -387,14 +387,14 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
         else:
             return self._calc_number(other, operator='sub')
 
-    def round(self) -> Self:
+    def round(self, ndigits: int | None = None) -> Self:
         return type(self)(
-            atk=round(self.atk),
-            def_=round(self.def_),
-            sp_atk=round(self.sp_atk),
-            sp_def=round(self.sp_def),
-            spd=round(self.spd),
-            hp=round(self.hp),
+            atk=round(self.atk, ndigits),
+            def_=round(self.def_, ndigits),
+            sp_atk=round(self.sp_atk, ndigits),
+            sp_def=round(self.sp_def, ndigits),
+            spd=round(self.spd, ndigits),
+            hp=round(self.hp, ndigits),
         )
 
     @classmethod
