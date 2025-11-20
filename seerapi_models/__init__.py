@@ -128,7 +128,7 @@ from .skill import (
     SkillHideEffectORM,
     SkillORM,
 )
-
+from .nature import Nature, NatureAttrORM, NatureORM
 SkillEffectInUse.model_rebuild(
     force=True,
     _parent_namespace_depth=2,
@@ -254,4 +254,7 @@ __all__ = [
     'VariationEffect',
     'VariationEffectORM',
     'YieldingEvORM',
+    'Nature',
+    'NatureAttrORM',
+    'NatureORM',
 ]
