@@ -261,6 +261,7 @@ class SkillBase(BaseResModel):
     )
     priority: int = Field(description='技能优先级')
     must_hit: bool = Field(description='技能是否必定命中')
+    atk_num: int = Field(default=1, description='组队对战中技能可作用目标数量，默认为1')
     info: str | None = Field(default=None, description='技能描述')
 
     @classmethod
@@ -306,6 +307,7 @@ class Skill(SkillBase, ConvertToORM['SkillORM']):
             category_id=self.category.id,
             type_id=self.type.id,
             hide_effect_id=self.hide_effect.id if self.hide_effect else None,
+            atk_num=self.atk_num,
         )
 
 
