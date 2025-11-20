@@ -4,6 +4,7 @@ from typing import (
     TYPE_CHECKING,
     ClassVar,
     Generic,
+    Literal,
     TypeVar,
     cast,
     overload,
@@ -270,8 +271,8 @@ class EidEffectInUseORM(EidEffectInUseBase, table=True):
 class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
     """六维属性类"""
 
-    atk: int = Field(description='攻击')
-    def_: int = Field(
+    atk: float = Field(description='攻击')
+    def_: float = Field(
         sa_type=Integer,
         sa_column_kwargs={'name': 'def', 'nullable': False},
         description='防御',
@@ -280,10 +281,10 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             'validation_alias': AliasChoices('def', 'def_'),
         },
     )
-    sp_atk: int = Field(description='特攻')
-    sp_def: int = Field(description='特防')
-    spd: int = Field(description='速度')
-    hp: int = Field(description='体力')
+    sp_atk: float = Field(description='特攻')
+    sp_def: float = Field(description='特防')
+    spd: float = Field(description='速度')
+    hp: float = Field(description='体力')
 
     percent: bool = Field(
         default=False,
@@ -322,33 +323,78 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             hp=attributes[5],
             percent=percent,
         )
+    
+    def _calc_number(
+        self,
+        other: 'SixAttributesBase',
+        *,
+        operator: Literal['add', 'sub', 'percent_mul', 'percent_div'],
+    ) -> Self:
+        keys = ['atk', 'def_', 'sp_atk', 'sp_def', 'spd', 'hp']
+        values = []
+        for key in keys:
+            val: int
+            if operator == 'add':
+                val = getattr(self, key) + getattr(other, key)
+            elif operator == 'sub':
+                val = getattr(self, key) - getattr(other, key)
+            elif operator == 'percent_mul':
+                val = getattr(self, key) * (1 + getattr(other, key) / 100)
+            elif operator == 'percent_div':
+                val = getattr(self, key) * (1 - getattr(other, key) / 100)
+
+            values.append(val)
+
+        return type(self)(**dict(zip(keys, values)))
 
     def __add__(self, other) -> Self:
         """两个六维属性相加"""
         cls = type(self)
         if not isinstance(other, cls):
-            return self
-        return cls(
-            atk=self.atk + other.atk,
-            def_=self.def_ + other.def_,
-            sp_atk=self.sp_atk + other.sp_atk,
-            sp_def=self.sp_def + other.sp_def,
-            spd=self.spd + other.spd,
-            hp=self.hp + other.hp,
-        )
+            raise TypeError(f'Cannot add {type(self)} and {type(other)}')
+
+        if self.percent and other.percent:
+            obj = self._calc_number(other, operator='add')
+            obj.percent = True
+            return obj
+        elif self.percent or other.percent:
+            if self.percent:
+                obj = other._calc_number(self, operator='percent_mul')
+            else:
+                obj = self._calc_number(other, operator='percent_mul')
+            obj.percent = False
+            return obj
+        else:
+            return self._calc_number(other, operator='add')
 
     def __sub__(self, other) -> Self:
         """两个六维属性相减"""
         cls = type(self)
         if not isinstance(other, cls):
-            return self
-        return cls(
-            atk=self.atk - other.atk,
-            def_=self.def_ - other.def_,
-            sp_atk=self.sp_atk - other.sp_atk,
-            sp_def=self.sp_def - other.sp_def,
-            spd=self.spd - other.spd,
-            hp=self.hp - other.hp,
+            raise TypeError(f'Cannot sub {type(self)} and {type(other)}')
+
+        if self.percent and other.percent:
+            obj = self._calc_number(other, operator='sub')
+            obj.percent = True
+            return obj
+        elif self.percent or other.percent:
+            if self.percent:
+                obj = other._calc_number(self, operator='percent_div')
+            else:
+                obj = self._calc_number(other, operator='percent_div')
+            obj.percent = False
+            return obj
+        else:
+            return self._calc_number(other, operator='sub')
+
+    def round(self) -> Self:
+        return type(self)(
+            atk=round(self.atk),
+            def_=round(self.def_),
+            sp_atk=round(self.sp_atk),
+            sp_def=round(self.sp_def),
+            spd=round(self.spd),
+            hp=round(self.hp),
         )
 
     @classmethod
@@ -361,7 +407,7 @@ class SixAttributes(
 ):
     @computed_field
     @property
-    def total(self) -> int:
+    def total(self) -> float:
         """总属性值"""
         return self.atk + self.def_ + self.sp_atk + self.sp_def + self.spd + self.hp
 
