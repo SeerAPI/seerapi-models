@@ -396,6 +396,156 @@ class TestCalcNumber:
         assert result.hp == 2400  # 6000 * (1 - 60 / 100).
 
 
+class TestRound:
+    """测试 round 方法"""
+
+    def test_round_default(self):
+        """测试默认舍入（到整数）"""
+        obj = SixAttributes(atk=10.4, def_=20.6, sp_atk=30.5, sp_def=40.1, spd=50.9, hp=60.3)
+        result = obj.round()
+        assert result.atk == 10
+        assert result.def_ == 21
+        assert result.sp_atk == 30  # Python 的 round 使用银行家舍入法
+        assert result.sp_def == 40
+        assert result.spd == 51
+        assert result.hp == 60
+
+    def test_round_to_one_decimal(self):
+        """测试舍入到一位小数"""
+        obj = SixAttributes(atk=10.46, def_=20.67, sp_atk=30.52, sp_def=40.18, spd=50.94, hp=60.33)
+        result = obj.round(1)
+        assert result.atk == 10.5
+        assert result.def_ == 20.7
+        assert result.sp_atk == 30.5
+        assert result.sp_def == 40.2
+        assert result.spd == 50.9
+        assert result.hp == 60.3
+
+    def test_round_to_two_decimals(self):
+        """测试舍入到两位小数"""
+        obj = SixAttributes(atk=10.456, def_=20.678, sp_atk=30.523, sp_def=40.189, spd=50.945, hp=60.331)
+        result = obj.round(2)
+        assert result.atk == 10.46
+        assert result.def_ == 20.68
+        assert result.sp_atk == 30.52
+        assert result.sp_def == 40.19
+        assert result.spd == 50.95
+        assert result.hp == 60.33
+
+    def test_round_preserves_percent_flag(self):
+        """测试舍入保持 percent 标志"""
+        obj = SixAttributes(atk=10.7, def_=20.3, sp_atk=30.5, sp_def=40.9, spd=50.1, hp=60.6, percent=True)
+        result = obj.round()
+        assert result.atk == 11
+        assert result.def_ == 20
+        assert result.sp_atk == 30
+        assert result.sp_def == 41
+        assert result.spd == 50
+        assert result.hp == 61
+        assert result.percent is True
+
+    def test_round_negative_values(self):
+        """测试负数的舍入"""
+        obj = SixAttributes(atk=-10.4, def_=-20.6, sp_atk=-30.5, sp_def=-40.1, spd=-50.9, hp=-60.3)
+        result = obj.round()
+        assert result.atk == -10
+        assert result.def_ == -21
+        assert result.sp_atk == -30
+        assert result.sp_def == -40
+        assert result.spd == -51
+        assert result.hp == -60
+
+    def test_round_already_integers(self):
+        """测试已经是整数的值"""
+        obj = SixAttributes(atk=10, def_=20, sp_atk=30, sp_def=40, spd=50, hp=60)
+        result = obj.round()
+        assert result.atk == 10
+        assert result.def_ == 20
+        assert result.sp_atk == 30
+        assert result.sp_def == 40
+        assert result.spd == 50
+        assert result.hp == 60
+
+    def test_round_zero_values(self):
+        """测试零值的舍入"""
+        obj = SixAttributes(atk=0.4, def_=0.6, sp_atk=0.5, sp_def=0.1, spd=0.9, hp=0.3)
+        result = obj.round()
+        assert result.atk == 0
+        assert result.def_ == 1
+        assert result.sp_atk == 0
+        assert result.sp_def == 0
+        assert result.spd == 1
+        assert result.hp == 0
+
+    def test_round_after_calculation(self):
+        """测试计算后的舍入"""
+        obj1 = SixAttributes(atk=100, def_=200, sp_atk=300, sp_def=400, spd=500, hp=600)
+        obj2 = SixAttributes(atk=15, def_=15, sp_atk=15, sp_def=15, spd=15, hp=15, percent=True)
+        result = obj1 + obj2  # 结果会有小数
+        result = result.round()
+        assert result.atk == 115  # 100 * 1.15 = 115.0
+        assert result.def_ == 230  # 200 * 1.15 = 230.0
+        assert result.sp_atk == 345  # 300 * 1.15 = 345.0
+        assert result.sp_def == 460  # 400 * 1.15 = 460.0
+        assert result.spd == 575  # 500 * 1.15 = 575.0
+        assert result.hp == 690  # 600 * 1.15 = 690.0
+
+    def test_round_complex_calculation(self):
+        """测试复杂计算后的舍入"""
+        obj1 = SixAttributes(atk=123, def_=234, sp_atk=345, sp_def=456, spd=567, hp=678)
+        obj2 = SixAttributes(atk=13, def_=17, sp_atk=19, sp_def=23, spd=29, hp=31, percent=True)
+        result = obj1 + obj2
+        result = result.round()
+        # 123 * 1.13 = 138.99 ≈ 139
+        assert result.atk == 139
+        # 234 * 1.17 = 273.78 ≈ 274
+        assert result.def_ == 274
+        # 345 * 1.19 = 410.55 ≈ 411
+        assert result.sp_atk == 411
+        # 456 * 1.23 = 560.88 ≈ 561
+        assert result.sp_def == 561
+        # 567 * 1.29 = 731.43 ≈ 731
+        assert result.spd == 731
+        # 678 * 1.31 = 888.18 ≈ 888
+        assert result.hp == 888
+
+    def test_round_preserves_original(self):
+        """测试舍入不修改原始对象"""
+        obj = SixAttributes(atk=10.7, def_=20.3, sp_atk=30.5, sp_def=40.9, spd=50.1, hp=60.6)
+        result = obj.round()
+        # 原始对象应保持不变
+        assert obj.atk == 10.7
+        assert obj.def_ == 20.3
+        assert obj.sp_atk == 30.5
+        assert obj.sp_def == 40.9
+        assert obj.spd == 50.1
+        assert obj.hp == 60.6
+        # 结果对象应该被舍入
+        assert result.atk == 11
+        assert result.def_ == 20
+        assert result.sp_atk == 30
+        assert result.sp_def == 41
+        assert result.spd == 50
+        assert result.hp == 61
+
+    def test_round_chain_with_operations(self):
+        """测试舍入与其他操作的链式调用"""
+        obj1 = SixAttributes(atk=100, def_=100, sp_atk=100, sp_def=100, spd=100, hp=100)
+        obj2 = SixAttributes(atk=33, def_=33, sp_atk=33, sp_def=33, spd=33, hp=33, percent=True)
+        
+        # 链式调用: 加法 -> 舍入
+        result = (obj1 + obj2).round()
+        assert result.atk == 133  # 100 * 1.33 = 133.0
+        assert result.def_ == 133
+        
+        # 多次操作后舍入
+        obj3 = SixAttributes(atk=10, def_=10, sp_atk=10, sp_def=10, spd=10, hp=10, percent=True)
+        result2 = (obj1 + obj2 - obj3).round()
+        # (100 * 1.33) * 0.9 = 133 * 0.9 = 119.7 ≈ 120
+        assert result2.atk == 120
+        assert result2.def_ == 120
+
+
 class TestIntegration:
     """集成测试"""
 

@@ -395,6 +395,7 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             sp_def=round(self.sp_def, ndigits),
             spd=round(self.spd, ndigits),
             hp=round(self.hp, ndigits),
+            percent=self.percent,
         )
 
     @classmethod
