@@ -13,7 +13,7 @@ from .common import ResourceRef, SkillEffectInUse, SkillEffectInUseORM
 if TYPE_CHECKING:
     from .element_type import TypeCombination, TypeCombinationORM
     from .mintmark import MintmarkORM
-    from .pet import SkillInPetORM, Pet
+    from .pet import Pet, SkillInPetORM
 
 
 class SkillEffectLink(SQLModel, table=True):

@@ -229,7 +229,8 @@ class Pet(PetBase, ConvertToORM['PetORM']):
                 is_fifth=skill.is_fifth,
                 skill_activation_item_id=(
                     skill.skill_activation_item.id
-                    if skill.skill_activation_item else None
+                    if skill.skill_activation_item
+                    else None
                 ),
             )
             for skill in self.skill

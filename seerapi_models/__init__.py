@@ -81,6 +81,7 @@ from .mintmark import (
     UniversalMintmark,
     UniversalPartORM,
 )
+from .nature import Nature, NatureAttrORM, NatureORM
 from .pet import (
     BaseStatORM,
     DiyStatsRangeORM,
@@ -128,7 +129,7 @@ from .skill import (
     SkillHideEffectORM,
     SkillORM,
 )
-from .nature import Nature, NatureAttrORM, NatureORM
+
 SkillEffectInUse.model_rebuild(
     force=True,
     _parent_namespace_depth=2,
@@ -187,6 +188,9 @@ __all__ = [
     'MintmarkRarityCategoryORM',
     'MintmarkTypeCategory',
     'MintmarkTypeCategoryORM',
+    'Nature',
+    'NatureAttrORM',
+    'NatureORM',
     'Pet',
     'PetArchiveStoryBook',
     'PetArchiveStoryBookORM',
@@ -254,7 +258,4 @@ __all__ = [
     'VariationEffect',
     'VariationEffectORM',
     'YieldingEvORM',
-    'Nature',
-    'NatureAttrORM',
-    'NatureORM',
 ]

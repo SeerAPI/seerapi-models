@@ -1,4 +1,5 @@
 from sqlmodel import Field, Relationship
+
 from seerapi_models.build_model import BaseResModel, ConvertToORM
 from seerapi_models.common import SixAttributes, SixAttributesORM
 
@@ -11,6 +12,7 @@ class NatureAttrORM(SixAttributesORM, table=True):
         description='性格修正属性ID',
     )
     nature: 'NatureORM' = Relationship(back_populates='attributes')
+
     @classmethod
     def resource_name(cls) -> str:
         return 'nature_attr'
@@ -28,12 +30,13 @@ class BaseNature(BaseResModel):
 
 class Nature(BaseNature, ConvertToORM['NatureORM']):
     """精灵性格修正模型"""
+
     attributes: SixAttributes = Field(description='性格修正属性')
 
     @classmethod
     def get_orm_model(cls) -> type['NatureORM']:
         return NatureORM
-    
+
     def to_orm(self) -> 'NatureORM':
         return NatureORM(
             id=self.id,
