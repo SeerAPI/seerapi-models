@@ -25,7 +25,7 @@ jobs:
           version: "latest"
 
       - name: 设置 Python
-        run: uv python install 3.10
+        run: uv python install 3.12
 
       - name: 获取 tag 版本
         id: get_version
