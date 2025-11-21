@@ -2,6 +2,7 @@ from collections.abc import Iterable
 import inspect
 from typing import (
     TYPE_CHECKING,
+    Annotated,
     ClassVar,
     Generic,
     Literal,
@@ -14,11 +15,12 @@ from typing_extensions import Self
 from pydantic import (
     AliasChoices,
     ConfigDict,
+    WithJsonSchema,
     computed_field,
     field_serializer,
 )
 from sqlalchemy.orm import column_property, declared_attr
-from sqlmodel import JSON, Column, Computed, Field, Integer, Relationship
+from sqlmodel import JSON, Column, Computed, Field, Numeric, Relationship
 
 from ._utils import move_to_last
 from .build_model import (
@@ -268,12 +270,15 @@ class EidEffectInUseORM(EidEffectInUseBase, table=True):
     suit_bonus: 'SuitBonusORM' = Relationship(back_populates='effect_in_use')
 
 
+AttrValue = Annotated[int | float, WithJsonSchema({'type': 'number'})]
+
+
 class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
     """六维属性类"""
 
-    atk: float = Field(description='攻击')
-    def_: float = Field(
-        sa_type=Integer,
+    atk: AttrValue = Field(sa_type=Numeric, description='攻击')
+    def_: AttrValue = Field(
+        sa_type=Numeric,
         sa_column_kwargs={'name': 'def', 'nullable': False},
         description='防御',
         schema_extra={
@@ -281,14 +286,14 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             'validation_alias': AliasChoices('def', 'def_'),
         },
     )
-    sp_atk: float = Field(description='特攻')
-    sp_def: float = Field(description='特防')
-    spd: float = Field(description='速度')
-    hp: float = Field(description='体力')
+    sp_atk: AttrValue = Field(sa_type=Numeric, description='特攻')
+    sp_def: AttrValue = Field(sa_type=Numeric, description='特防')
+    spd: AttrValue = Field(sa_type=Numeric, description='速度')
+    hp: AttrValue = Field(sa_type=Numeric, description='体力')
 
     percent: bool = Field(
         default=False,
-        description='该对象描述的是否是百分比加成，如果为true，属性值为省略百分比（%）符号的加成',
+        description='该对象描述的是否是百分比加成，如果为true，属性值为百分比值',
     )
 
     @classmethod
@@ -323,7 +328,7 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             hp=attributes[5],
             percent=percent,
         )
-    
+
     def _calc_number(
         self,
         other: 'SixAttributesBase',
@@ -435,7 +440,7 @@ class SixAttributesORM(SixAttributesBase):
     def total(self):  # type: ignore
         return column_property(
             Column(
-                Integer,
+                Numeric,
                 Computed('atk + def + sp_atk + sp_def + spd + hp'),
                 nullable=False,
             )
