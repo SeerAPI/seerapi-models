@@ -49,7 +49,7 @@ class SkillStoneEffectORM(SkillStoneEffectBase, table=True):
 
 
 class SkillStoneBase(BaseResModel):
-    id: int = Field(primary_key=True, foreign_key='item.id', description='技能石ID')
+    id: int = Field(primary_key=True, description='技能石ID')
     name: str = Field(description='技能石名称')
     rank: int = Field(description='技能石等级，1到5分别对应D, C, B, A, S')
     power: int = Field(description='技能石威力')
@@ -82,6 +82,7 @@ class SkillStone(SkillStoneBase, ConvertToORM['SkillStoneORM']):
         ]
         return SkillStoneORM(
             id=self.id,
+            item_id=self.item.id,
             name=self.name,
             rank=self.rank,
             power=self.power,
@@ -99,6 +100,7 @@ class SkillStoneORM(SkillStoneBase, table=True):
     category: 'SkillStoneCategoryORM' = Relationship(
         back_populates='skill_stone',
     )
+    item_id: int = Field(foreign_key='item.id')
     item: 'ItemORM' = Relationship(
         back_populates='skill_stone',
     )
