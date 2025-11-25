@@ -35,7 +35,7 @@ jobs:
 
       - name: 验证版本号匹配
         run: |
-          PROJECT_VERSION=$(uv run python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          PROJECT_VERSION=$(uv version --short)
           if [ "$PROJECT_VERSION" != "${{ steps.get_version.outputs.VERSION }}" ]; then
             echo "错误: pyproject.toml 中的版本 ($PROJECT_VERSION) 与 tag 版本 (${{ steps.get_version.outputs.VERSION }}) 不匹配"
             exit 1
