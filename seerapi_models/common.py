@@ -194,6 +194,14 @@ class ApiResourceList(BaseGeneralModel, Generic[TResModel]):
         return 'common/api_resource_list/'
 
 
+class NamedData(BaseGeneralModel, Generic[TResModel]):
+    data: dict[int, TResModel]
+
+    @classmethod
+    def schema_path(cls) -> str:
+        return 'common/named_data/'
+
+
 class EidEffect(BaseResModel, BaseGeneralModel, ConvertToORM['EidEffectORM']):
     # info: str | None = Field(
     #     default=None,
@@ -516,6 +524,7 @@ __all__ = [
     'EidEffectInUseBase',
     'EidEffectInUseORM',
     'EidEffectORM',
+    'NamedData',
     'NamedResourceRef',
     'ResourceRef',
     'SixAttributes',
