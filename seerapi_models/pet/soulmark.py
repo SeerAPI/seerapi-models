@@ -58,7 +58,7 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
         description='强化后的魂印资源，该字段仅在该魂印有强化版时有效，否则为null'
     )
     from_: ResourceRef['Soulmark'] | None = Field(
-        description='魂印资源，该字段仅在该魂印是强化/觉醒魂印时有效',
+        description='强化前的魂印资源，该字段仅在该魂印是强化/觉醒魂印时有效',
         schema_extra={
             'serialization_alias': 'from',
             'validation_alias': AliasChoices('from', 'from_'),

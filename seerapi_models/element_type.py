@@ -59,9 +59,9 @@ class TypeCombinationBase(BaseResModel):
 
 
 class TypeCombination(TypeCombinationBase, ConvertToORM['TypeCombinationORM']):
-    primary: ResourceRef[ElementType] = Field(description='主属性')
+    primary: ResourceRef[ElementType] = Field(description='第一属性')
     secondary: ResourceRef[ElementType] | None = Field(
-        default=None, description='副属性'
+        default=None, description='第二属性，仅在该属性为双属性时有效'
     )
 
     @computed_field(description='是否是双属性')

@@ -55,7 +55,10 @@ class ResourceRef(BaseGeneralModel, Generic[TResModel]):
     base_data_url: ClassVar[str] = BASE_DATA_URL
 
     id: int = Field(description='资源ID')
-    url: str = Field(description='资源URL')
+    url: str = Field(
+        description='资源URL',
+        schema_extra={'format': 'uri'},
+    )
 
     @field_serializer('url', mode='plain')
     def _serialize_url(self, url: str) -> str:

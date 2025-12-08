@@ -73,7 +73,7 @@ class PetArchiveStoryEntry(
     PetArchiveStoryEntryBase, ConvertToORM['PetArchiveStoryEntryORM']
 ):
     pet: ResourceRef['Pet'] = Field(description='精灵')
-    book: ResourceRef['PetArchiveStoryBook'] = Field(description='故事')
+    book: ResourceRef['PetArchiveStoryBook'] = Field(description='故事系列')
 
     @classmethod
     def get_orm_model(cls) -> type['PetArchiveStoryEntryORM']:

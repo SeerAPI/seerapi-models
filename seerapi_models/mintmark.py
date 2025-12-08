@@ -82,9 +82,7 @@ class MintmarkResRefs(SQLModel):
 
 
 class AbilityMintmark(MintmarkBase, MintmarkResRefs):
-    max_attr_value: SixAttributes = Field(
-        description='刻印满级属性值，仅当该刻印为能力刻印或全能刻印时有效'
-    )
+    max_attr_value: SixAttributes = Field(description='刻印属性值')
 
     @classmethod
     def resource_name(cls) -> str:
