@@ -4,6 +4,8 @@ from typing import Generic, TypeVar
 from sqlalchemy.orm import declared_attr
 from sqlmodel import Field, SQLModel
 
+from seerapi_models.build_model.comment import APIComment
+
 _TModel = TypeVar('_TModel', bound=SQLModel)
 
 
@@ -22,6 +24,12 @@ class BaseResModel(ResModelMixin, ABC):
     """资源模型抽象基类"""
 
     id: int = Field(description='资源ID', primary_key=True)
+
+    # @classmethod
+    # @abstractmethod
+    # def get_api_comment(cls) -> APIComment:
+    #     """获取模型的 OpenAPI 说明注释"""
+    #     pass
 
 
 class BaseResModelWithOptionalId(ResModelMixin, ABC):
@@ -58,6 +66,7 @@ class BaseCategoryModel(BaseResModel, ABC, Generic[_TModel]): ...
 
 
 __all__ = [
+    'APIComment',
     'BaseCategoryModel',
     'BaseGeneralModel',
     'BaseResModel',
