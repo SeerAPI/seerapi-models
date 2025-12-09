@@ -8,6 +8,7 @@ from seerapi_models.build_model import (
     BaseResModel,
     ConvertToORM,
 )
+from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
 
 if TYPE_CHECKING:
@@ -97,18 +98,18 @@ class DiyStatsRange(BaseModel):
         """将DiyStats转换为DiyStatsRangeORM"""
         return DiyStatsRangeORM(
             id=pet_id,
-            atk_min=self.min.atk,
-            def_min=self.min.def_,
-            sp_atk_min=self.min.sp_atk,
-            sp_def_min=self.min.sp_def,
-            spd_min=self.min.spd,
-            hp_min=self.min.hp,
-            atk_max=self.max.atk,
-            def_max=self.max.def_,
-            sp_atk_max=self.max.sp_atk,
-            sp_def_max=self.max.sp_def,
-            spd_max=self.max.spd,
-            hp_max=self.max.hp,
+            atk_min=int(self.min.atk),
+            def_min=int(self.min.def_),
+            sp_atk_min=int(self.min.sp_atk),
+            sp_def_min=int(self.min.sp_def),
+            spd_min=int(self.min.spd),
+            hp_min=int(self.min.hp),
+            atk_max=int(self.max.atk),
+            def_max=int(self.max.def_),
+            sp_atk_max=int(self.max.sp_atk),
+            sp_def_max=int(self.max.sp_def),
+            spd_max=int(self.max.spd),
+            hp_max=int(self.max.hp),
         )
 
 
@@ -261,6 +262,381 @@ class Pet(PetBase, ConvertToORM['PetORM']):
             enemy_resource_id=self.enemy_resource_id,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='精灵',
+            examples=[
+                {
+                    'id': 4186,
+                    'name': '镇世·乔特鲁德',
+                    'yielding_exp': 140,
+                    'catch_rate': 0,
+                    'evolving_lv': 0,
+                    'releaseable': False,
+                    'fusion_master': False,
+                    'fusion_sub': False,
+                    'has_resistance': True,
+                    'resource_id': 4186,
+                    'enemy_resource_id': None,
+                    'type': {
+                        'id': 15,
+                        'url': 'https://api.seerapi.com/v1/element_type_combination/15',
+                    },
+                    'gender': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/pet_gender/1',
+                    },
+                    'base_stats': {
+                        'atk': 70,
+                        'def': 116,
+                        'sp_atk': 138,
+                        'sp_def': 116,
+                        'spd': 135,
+                        'hp': 175,
+                        'percent': False,
+                        'total': 750,
+                    },
+                    'pet_class': {
+                        'id': 2846,
+                        'url': 'https://api.seerapi.com/v1/pet_class/2846',
+                    },
+                    'evolution_chain_index': 0,
+                    'yielding_ev': {
+                        'atk': 0,
+                        'def': 0,
+                        'sp_atk': 0,
+                        'sp_def': 0,
+                        'spd': 0,
+                        'hp': 0,
+                        'percent': False,
+                        'total': 0,
+                    },
+                    'vipbuff': None,
+                    'mount_type': None,
+                    'diy_stats': None,
+                    'skill': [
+                        {
+                            'learning_level': 1,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 10004,
+                                'url': 'https://api.seerapi.com/v1/skill/10004',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 5,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 20065,
+                                'url': 'https://api.seerapi.com/v1/skill/20065',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 9,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 10614,
+                                'url': 'https://api.seerapi.com/v1/skill/10614',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 13,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 20041,
+                                'url': 'https://api.seerapi.com/v1/skill/20041',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 17,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 10302,
+                                'url': 'https://api.seerapi.com/v1/skill/10302',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 21,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 19287,
+                                'url': 'https://api.seerapi.com/v1/skill/19287',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 25,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 20660,
+                                'url': 'https://api.seerapi.com/v1/skill/20660',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 29,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 10761,
+                                'url': 'https://api.seerapi.com/v1/skill/10761',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 33,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 24738,
+                                'url': 'https://api.seerapi.com/v1/skill/24738',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 37,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 10977,
+                                'url': 'https://api.seerapi.com/v1/skill/10977',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 41,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 24739,
+                                'url': 'https://api.seerapi.com/v1/skill/24739',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 45,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 19288,
+                                'url': 'https://api.seerapi.com/v1/skill/19288',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 49,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 19289,
+                                'url': 'https://api.seerapi.com/v1/skill/19289',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 53,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 24740,
+                                'url': 'https://api.seerapi.com/v1/skill/24740',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 57,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 19290,
+                                'url': 'https://api.seerapi.com/v1/skill/19290',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 61,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 19291,
+                                'url': 'https://api.seerapi.com/v1/skill/19291',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 71,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 34897,
+                                'url': 'https://api.seerapi.com/v1/skill/34897',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 72,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 27496,
+                                'url': 'https://api.seerapi.com/v1/skill/27496',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 73,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 34898,
+                                'url': 'https://api.seerapi.com/v1/skill/34898',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 74,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 27497,
+                                'url': 'https://api.seerapi.com/v1/skill/27497',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 75,
+                            'is_special': False,
+                            'is_advanced': False,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 34899,
+                                'url': 'https://api.seerapi.com/v1/skill/34899',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': None,
+                            'is_special': False,
+                            'is_advanced': True,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 29187,
+                                'url': 'https://api.seerapi.com/v1/skill/29187',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': None,
+                            'is_special': False,
+                            'is_advanced': True,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 29188,
+                                'url': 'https://api.seerapi.com/v1/skill/29188',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': None,
+                            'is_special': False,
+                            'is_advanced': True,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 38147,
+                                'url': 'https://api.seerapi.com/v1/skill/38147',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': None,
+                            'is_special': False,
+                            'is_advanced': True,
+                            'is_fifth': False,
+                            'skill': {
+                                'id': 38148,
+                                'url': 'https://api.seerapi.com/v1/skill/38148',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 76,
+                            'is_special': True,
+                            'is_advanced': False,
+                            'is_fifth': True,
+                            'skill': {
+                                'id': 34900,
+                                'url': 'https://api.seerapi.com/v1/skill/34900',
+                            },
+                            'skill_activation_item': None,
+                        },
+                        {
+                            'learning_level': 76,
+                            'is_special': True,
+                            'is_advanced': False,
+                            'is_fifth': True,
+                            'skill': {
+                                'id': 37295,
+                                'url': 'https://api.seerapi.com/v1/skill/37295',
+                            },
+                            'skill_activation_item': {
+                                'id': 1725959,
+                                'url': 'https://api.seerapi.com/v1/skill_activation_item/1725959',
+                            },
+                        },
+                    ],
+                    'soulmark': [
+                        {'id': 1409, 'url': 'https://api.seerapi.com/v1/soulmark/1409'},
+                        {'id': 2028, 'url': 'https://api.seerapi.com/v1/soulmark/2028'},
+                    ],
+                    'encyclopedia_entry': {
+                        'id': 4186,
+                        'url': 'https://api.seerapi.com/v1/pet_encyclopedia_entry/4186',
+                    },
+                    'archive_story_entry': {
+                        'id': 371,
+                        'url': 'https://api.seerapi.com/v1/pet_archive_story_entry/371',
+                    },
+                    'hash': 'e7bfbaf3',
+                }
+            ],
+            tags=['精灵'],
+            description='精灵资源',
+        )
+
 
 class PetORM(PetBase, table=True):
     type_id: int = Field(foreign_key='element_type_combination.id')
@@ -382,6 +758,35 @@ class PetClass(PetClassBase, ConvertToORM['PetClassORM']):
             is_fusion_pet=self.is_fusion_pet,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='精灵类别',
+            examples=[
+                {
+                    'id': 18,
+                    'is_variant_pet': False,
+                    'is_dark_pet': False,
+                    'is_shine_pet': False,
+                    'is_rare_pet': False,
+                    'is_breeding_pet': False,
+                    'is_fusion_pet': False,
+                    'evolution_chain': [
+                        {'id': 48, 'url': 'https://api.seerapi.com/v1/pet/48'},
+                        {'id': 49, 'url': 'https://api.seerapi.com/v1/pet/49'},
+                        {'id': 50, 'url': 'https://api.seerapi.com/v1/pet/50'},
+                        {'id': 1361, 'url': 'https://api.seerapi.com/v1/pet/1361'},
+                    ],
+                    'hash': '69bd7249',
+                }
+            ],
+            tags=['精灵', '进化链', '分类'],
+            description='精灵类别，这个资源用于分类同一“进化链”的精灵。'
+            '（这里的进化链是指官方数据定义中一个已经停止维护的特殊字段，'
+            '例如[索拉，赫拉斯，阿克希亚，阿克妮丝]属于同一个进化链，但女皇阿克希亚与冰之契约阿克希亚不在该进化链中）',
+        )
+
 
 class PetClassORM(PetClassBase, table=True):
     evolution_chain: list['PetORM'] = Relationship(back_populates='pet_class')
@@ -414,6 +819,27 @@ class PetGenderCategory(PetGenderBase, PetCategoryRefs, ConvertToORM['PetGenderO
             description=self.description,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='精灵性别分类',
+            examples=[
+                {
+                    'id': 1,
+                    'name': '雄性',
+                    'pet': [
+                        {'id': 4, 'url': 'https://api.seerapi.com/v1/pet/4'},
+                        {'id': 5, 'url': 'https://api.seerapi.com/v1/pet/5'},
+                        {'id': 6, 'url': 'https://api.seerapi.com/v1/pet/6'},
+                    ],
+                    'hash': '69bd7249',
+                }
+            ],
+            tags=['精灵', '性别', '分类'],
+            description='精灵性别分类。',
+        )
+
 
 class PetGenderORM(PetGenderBase, table=True):
     pet: list['PetORM'] = Relationship(back_populates='gender')
@@ -439,6 +865,29 @@ class PetVipBuffCategory(
             description=self.description,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='精灵VIP加成分类',
+            examples=[
+                {
+                    'pet': [
+                        {'id': 164, 'url': 'https://api.seerapi.com/v1/pet/164'},
+                        {'id': 165, 'url': 'https://api.seerapi.com/v1/pet/165'},
+                        {'id': 166, 'url': 'https://api.seerapi.com/v1/pet/166'},
+                        {'id': 284, 'url': 'https://api.seerapi.com/v1/pet/284'},
+                    ],
+                    'id': 1,
+                    'name': '闪光加成',
+                    'description': '闪光加成',
+                    'hash': '69bd7249',
+                }
+            ],
+            tags=['精灵', '分类'],
+            description='精灵VIP加成分类，用于分类闪光/暗黑加成。',
+        )
+
 
 class PetVipBuffORM(PetVipBuffBase, table=True):
     pet: list['PetORM'] = Relationship(back_populates='vipbuff')
@@ -462,6 +911,40 @@ class PetMountTypeCategory(
             id=self.id,
             name=self.name,
             description=self.description,
+        )
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='精灵坐骑类型分类',
+            examples=[
+                {
+                    'pet': [
+                        {'id': 483, 'url': 'https://api.seerapi.com/v1/pet/483'},
+                        {'id': 527, 'url': 'https://api.seerapi.com/v1/pet/527'},
+                        {'id': 504, 'url': 'https://api.seerapi.com/v1/pet/504'},
+                        {'id': 898, 'url': 'https://api.seerapi.com/v1/pet/898'},
+                        {'id': 1055, 'url': 'https://api.seerapi.com/v1/pet/1055'},
+                        {'id': 1115, 'url': 'https://api.seerapi.com/v1/pet/1115'},
+                        {'id': 1156, 'url': 'https://api.seerapi.com/v1/pet/1156'},
+                        {'id': 1482, 'url': 'https://api.seerapi.com/v1/pet/1482'},
+                        {'id': 1635, 'url': 'https://api.seerapi.com/v1/pet/1635'},
+                        {'id': 1763, 'url': 'https://api.seerapi.com/v1/pet/1763'},
+                        {'id': 1833, 'url': 'https://api.seerapi.com/v1/pet/1833'},
+                        {'id': 1956, 'url': 'https://api.seerapi.com/v1/pet/1956'},
+                        {'id': 2128, 'url': 'https://api.seerapi.com/v1/pet/2128'},
+                        {'id': 2284, 'url': 'https://api.seerapi.com/v1/pet/2284'},
+                        {'id': 3853, 'url': 'https://api.seerapi.com/v1/pet/3853'},
+                    ],
+                    'id': 2,
+                    'name': '飞行',
+                    'description': '飞行坐骑精灵',
+                    'hash': 'cdfe6b83',
+                }
+            ],
+            tags=['精灵', '坐骑类型', '分类'],
+            description='精灵坐骑类型分类。',
         )
 
 

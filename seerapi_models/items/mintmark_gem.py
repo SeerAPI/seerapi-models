@@ -3,6 +3,7 @@ from typing import Optional, cast
 from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import BaseCategoryModel, BaseResModel, ConvertToORM
+from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef, SkillEffectInUse, SkillEffectInUseORM
 from seerapi_models.items import Item, ItemORM
 
@@ -49,6 +50,16 @@ class Gem(GemBase, GemResRefs, ConvertToORM['GemORM']):
     upgrade_cost: int | None = Field(
         default=None, description='升级到该等级需要的石之砂数量，仅在2代宝石中有效'
     )
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='宝石',
+            examples=[],
+            tags=['刻印宝石', '刻印', '道具'],
+            description='刻印宝石，返回的模型中同时包含一代和二代宝石的相关字段，可通过generation_id字段区分。',
+        )
 
     @classmethod
     def get_orm_model(cls) -> type['GemORM']:
@@ -114,10 +125,93 @@ class GemGen1(GemBase, GemResRefs):
     fail_compensate_range: tuple[int, int] = Field(
         description='当镶嵌失败时返还的宝石的等级范围'
     )
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='一代刻印宝石',
+            examples=[
+                {
+                    'next_level_gem': {
+                        'id': 1800002,
+                        'url': 'https://api.seerapi.com/v1/gem/1800002',
+                    },
+                    'category': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/gem_category/1',
+                    },
+                    'effect': [
+                        {
+                            'info': '命中后3%令对方冻伤',
+                            'args': [3],
+                            'effect': {
+                                'id': 14,
+                                'url': 'https://api.seerapi.com/v1/skill_effect_type/14',
+                            },
+                        }
+                    ],
+                    'item': {
+                        'id': 1800001,
+                        'url': 'https://api.seerapi.com/v1/item/1800001',
+                    },
+                    'id': 1800001,
+                    'name': '冻伤宝石Lv1',
+                    'level': 1,
+                    'generation_id': 1,
+                    'inlay_rate': 100,
+                    'equivalent_level1_count': 1,
+                    'fail_compensate_range': [1, 1],
+                    'hash': '6744fe70',
+                },
+            ],
+            tags=['刻印宝石', '刻印', '道具'],
+            description='一代刻印宝石，返回的模型中仅包含1代宝石的相关字段。',
+        )
 
 
 class GemGen2(GemBase, GemResRefs):
     upgrade_cost: int = Field(description='升级到该等级需要的石之砂数量')
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='二代刻印宝石',
+            examples=[
+                {
+                    'next_level_gem': {
+                        'id': 1800202,
+                        'url': 'https://api.seerapi.com/v1/gem/1800202',
+                    },
+                    'category': {
+                        'id': 101,
+                        'url': 'https://api.seerapi.com/v1/gem_category/101',
+                    },
+                    'effect': [
+                        {
+                            'info': '使用技能5%不消耗PP值',
+                            'args': [5],
+                            'effect': {
+                                'id': 1703,
+                                'url': 'https://api.seerapi.com/v1/skill_effect_type/1703',
+                            },
+                        }
+                    ],
+                    'item': {
+                        'id': 1800201,
+                        'url': 'https://api.seerapi.com/v1/item/1800201',
+                    },
+                    'id': 1800201,
+                    'name': '活力维持宝石Ⅰ',
+                    'level': 1,
+                    'generation_id': 2,
+                    'upgrade_cost': 0,
+                    'hash': '1020b156',
+                },
+            ],
+            tags=['刻印宝石', '刻印', '道具'],
+            description='二代刻印宝石，返回的模型中仅包含二代宝石的相关字段。',
+        )
 
 
 class GemORM(GemBase, table=True):
@@ -217,6 +311,65 @@ class GemCategory(GemCategoryBase, ConvertToORM['GemCategoryORM']):
     def get_orm_model(cls) -> type['GemCategoryORM']:
         return GemCategoryORM
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='宝石类别',
+            examples=[
+                {
+                    'id': 1,
+                    'name': '冻伤宝石',
+                    'generation_id': 1,
+                    'gem': [
+                        {
+                            'id': 1800001,
+                            'url': 'https://api.seerapi.com/v1/gem/1800001',
+                        },
+                        {
+                            'id': 1800002,
+                            'url': 'https://api.seerapi.com/v1/gem/1800002',
+                        },
+                        {
+                            'id': 1800003,
+                            'url': 'https://api.seerapi.com/v1/gem/1800003',
+                        },
+                        {
+                            'id': 1800004,
+                            'url': 'https://api.seerapi.com/v1/gem/1800004',
+                        },
+                        {
+                            'id': 1800005,
+                            'url': 'https://api.seerapi.com/v1/gem/1800005',
+                        },
+                        {
+                            'id': 1800006,
+                            'url': 'https://api.seerapi.com/v1/gem/1800006',
+                        },
+                        {
+                            'id': 1800007,
+                            'url': 'https://api.seerapi.com/v1/gem/1800007',
+                        },
+                        {
+                            'id': 1800008,
+                            'url': 'https://api.seerapi.com/v1/gem/1800008',
+                        },
+                        {
+                            'id': 1800009,
+                            'url': 'https://api.seerapi.com/v1/gem/1800009',
+                        },
+                        {
+                            'id': 1800010,
+                            'url': 'https://api.seerapi.com/v1/gem/1800010',
+                        },
+                    ],
+                    'hash': '541054c1',
+                }
+            ],
+            tags=['刻印宝石', '刻印', '道具', '分类'],
+            description='宝石种类分类，用于快速获取不同种类的宝石。',
+        )
+
     def to_orm(self) -> 'GemCategoryORM':
         return GemCategoryORM(
             id=self.id,
@@ -248,6 +401,35 @@ class GemGenCategory(GemGenCategoryBase, ConvertToORM['GemGenCategoryORM']):
     @classmethod
     def get_orm_model(cls) -> type['GemGenCategoryORM']:
         return GemGenCategoryORM
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='宝石世代类别',
+            examples=[
+                {
+                    'id': 2,
+                    'gem_category': [
+                        {
+                            'id': 1800201,
+                            'url': 'https://api.seerapi.com/v1/gem/1800201',
+                        },
+                        {
+                            'id': 1800202,
+                            'url': 'https://api.seerapi.com/v1/gem/1800202',
+                        },
+                        {
+                            'id': 1800203,
+                            'url': 'https://api.seerapi.com/v1/gem/1800203',
+                        },
+                    ],
+                    'hash': 'b194c178',
+                }
+            ],
+            tags=['刻印宝石', '刻印', '道具', '分类'],
+            description='宝石世代类别，用于分类不同世代的宝石。',
+        )
 
     def to_orm(self) -> 'GemGenCategoryORM':
         return GemGenCategoryORM(

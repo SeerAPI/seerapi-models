@@ -4,6 +4,7 @@ from typing import Optional, cast
 from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import BaseCategoryModel, BaseResModel, ConvertToORM
+from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
 
 
@@ -138,6 +139,47 @@ class Achievement(
             **kwargs,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='成就',
+            examples=[
+                {
+                    'is_ability_bonus': False,
+                    'ability_desc': None,
+                    'type': {
+                        'id': 0,
+                        'url': 'https://api.seerapi.com/v1/achievement_type/0',
+                    },
+                    'branch': {
+                        'id': 11,
+                        'url': 'https://api.seerapi.com/v1/achievement_branch/11',
+                    },
+                    'next_level_achievement': {
+                        'id': 3,
+                        'url': 'https://api.seerapi.com/v1/achievement/3',
+                    },
+                    'prev_level_achievement': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/achievement/1',
+                    },
+                    'attr_bonus': None,
+                    'id': 2,
+                    'name': '要塞保卫战（二）',
+                    'point': 10,
+                    'desc': '保卫战获得10胜',
+                    'is_hide': False,
+                    'title_id': None,
+                    'title': None,
+                    'original_title': None,
+                    'hash': 'a2670b41',
+                }
+            ],
+            tags=['成就'],
+            description='成就资源，该资源的ID字段由分析器生成，游戏内不存在对应的字段。',
+        )
+
 
 class AchievementORM(BaseAchievement, table=True):
     type_id: int = Field(foreign_key='achievement_type.id')
@@ -197,6 +239,50 @@ class BaseTitle(BaseAchievement, AbilityBonusMixin):
 class Title(BaseTitle, AchievementRefsMixin):
     """成就称号资源"""
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='成就称号',
+            examples=[
+                {
+                    'type': {
+                        'id': 5,
+                        'url': 'https://api.seerapi.com/v1/achievement_type/5',
+                    },
+                    'branch': {
+                        'id': 166,
+                        'url': 'https://api.seerapi.com/v1/achievement_branch/166',
+                    },
+                    'next_level_achievement': None,
+                    'prev_level_achievement': None,
+                    'attr_bonus': {
+                        'atk': 45,
+                        'def': 30,
+                        'sp_atk': 45,
+                        'sp_def': 0,
+                        'spd': 0,
+                        'hp': 0,
+                        'percent': False,
+                        'total': 120,
+                    },
+                    'is_ability_bonus': True,
+                    'ability_desc': '攻击+45，特攻+45，防御+30',
+                    'id': 528,
+                    'name': '气旋斗者',
+                    'point': 10,
+                    'desc': '完成闭锁空间的气团对决挑战获得',
+                    'is_hide': False,
+                    'achievement_id': 1134,
+                    'achievement_name': '气旋斗者',
+                    'original_name': '气旋斗者',
+                    'hash': 'e09ff996',
+                }
+            ],
+            tags=['成就', '称号'],
+            description='成就称号资源，用于表示成就的称号，该资源的ID字段为游戏内的称号ID，这与成就不同。',
+        )
+
 
 class TitlePartORM(BaseResModel, TitleInfoMixin, table=True):
     ability_desc: str | None = Field(default=None, description='能力加成描述')
@@ -251,6 +337,16 @@ class AchievementType(BaseAchievementType, ConvertToORM['AchievementTypeORM']):
             point_total=self.point_total,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='成就类型',
+            examples=[],  # TODO: 添加示例
+            tags=['成就', '分类'],
+            description='成就类型分类。',
+        )
+
 
 class AchievementTypeORM(BaseAchievementType, table=True):
     achievement: list['AchievementORM'] = Relationship(
@@ -294,6 +390,16 @@ class AchievementBranch(BaseAchievementBranch, ConvertToORM['AchievementBranchOR
             type_id=self.type.id,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='成就分支',
+            examples=[],  # TODO: 添加示例
+            tags=['成就'],
+            description='成就嵌套结构的中间层，没什么实际意义，仅用于还原游戏内数据结构。',
+        )
+
 
 class AchievementBranchORM(BaseAchievementBranch, table=True):
     achievement: list['AchievementORM'] = Relationship(
@@ -321,3 +427,49 @@ class AchievementCategory(BaseAchievementCategory):
     achievement: list[ResourceRef['Achievement']] = Field(
         default_factory=list, description='该分类下的成就'
     )
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='成就分类',
+            examples=[
+                {
+                    'id': 1,
+                    'name': 'hide_achievement',
+                    'achievement': [
+                        {
+                            'id': 312,
+                            'url': 'https://api.seerapi.com/v1/achievement/312',
+                        },
+                        {
+                            'id': 318,
+                            'url': 'https://api.seerapi.com/v1/achievement/318',
+                        },
+                        {
+                            'id': 320,
+                            'url': 'https://api.seerapi.com/v1/achievement/320',
+                        },
+                        {
+                            'id': 321,
+                            'url': 'https://api.seerapi.com/v1/achievement/321',
+                        },
+                        {
+                            'id': 322,
+                            'url': 'https://api.seerapi.com/v1/achievement/322',
+                        },
+                        {
+                            'id': 907,
+                            'url': 'https://api.seerapi.com/v1/achievement/907',
+                        },
+                        {
+                            'id': 908,
+                            'url': 'https://api.seerapi.com/v1/achievement/908',
+                        },
+                    ],
+                    'hash': '59669272',
+                }
+            ],
+            tags=['成就', '分类'],
+            description='成就分类资源，用于在API中筛选能力加成/隐藏成就。',
+        )

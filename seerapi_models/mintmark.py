@@ -9,6 +9,7 @@ from seerapi_models.build_model import (
     BaseResModelWithOptionalId,
     ConvertToORM,
 )
+from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
 
 if TYPE_CHECKING:
@@ -88,6 +89,42 @@ class AbilityMintmark(MintmarkBase, MintmarkResRefs):
     def resource_name(cls) -> str:
         return 'ability_mintmark'
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='能力刻印',
+            examples=[
+                {
+                    'type': {
+                        'id': 0,
+                        'url': 'https://api.seerapi.com/v1/mintmark_type/0',
+                    },
+                    'rarity': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/mintmark_rarity/1',
+                    },
+                    'pet': None,
+                    'id': 10393,
+                    'name': '2016全国线下赛冠军刻印',
+                    'desc': '特攻+50 特防+30 速度+25 体力+60',
+                    'max_attr_value': {
+                        'atk': 0,
+                        'def': 0,
+                        'sp_atk': 50,
+                        'sp_def': 30,
+                        'spd': 25,
+                        'hp': 60,
+                        'percent': False,
+                        'total': 165,
+                    },
+                    'hash': '152efd24',
+                }
+            ],
+            tags=['刻印'],
+            description='能力刻印资源。',
+        )
+
 
 class SkillMintmark(MintmarkBase, MintmarkResRefs):
     effect: SkillMintmarkEffect = Field(
@@ -100,6 +137,39 @@ class SkillMintmark(MintmarkBase, MintmarkResRefs):
     @classmethod
     def resource_name(cls) -> str:
         return 'skill_mintmark'
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='技能刻印',
+            examples=[
+                {
+                    'type': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/mintmark_type/1',
+                    },
+                    'rarity': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/mintmark_rarity/1',
+                    },
+                    'pet': [
+                        {'id': 70, 'url': 'https://api.seerapi.com/v1/pet/70'},
+                        {'id': 2394, 'url': 'https://api.seerapi.com/v1/pet/2394'},
+                    ],
+                    'id': 20006,
+                    'name': '雷祭刻印',
+                    'desc': '命中率+10%',
+                    'effect': {'effect': 104, 'arg': 10},
+                    'skill': [
+                        {'id': 20085, 'url': 'https://api.seerapi.com/v1/skill/20085'}
+                    ],
+                    'hash': '8d04328d',
+                }
+            ],
+            tags=['刻印', '技能'],
+            description='技能刻印资源。',
+        )
 
 
 class UniversalMintmark(MintmarkBase, MintmarkResRefs):
@@ -120,6 +190,57 @@ class UniversalMintmark(MintmarkBase, MintmarkResRefs):
     @classmethod
     def resource_name(cls) -> str:
         return 'universal_mintmark'
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='全能刻印',
+            examples=[
+                {
+                    'type': {
+                        'id': 3,
+                        'url': 'https://api.seerapi.com/v1/mintmark_type/3',
+                    },
+                    'rarity': {
+                        'id': 5,
+                        'url': 'https://api.seerapi.com/v1/mintmark_rarity/5',
+                    },
+                    'pet': None,
+                    'id': 42595,
+                    'name': '和平星-双鱼座',
+                    'desc': '攻击5/54,防御3/34,特防3/34,速度4/43,体力9/95',
+                    'mintmark_class': {
+                        'id': 91,
+                        'url': 'https://api.seerapi.com/v1/mintmark_class/91',
+                    },
+                    'base_attr_value': {
+                        'atk': 5,
+                        'def': 3,
+                        'sp_atk': 0,
+                        'sp_def': 3,
+                        'spd': 4,
+                        'hp': 9,
+                        'percent': False,
+                        'total': 24,
+                    },
+                    'max_attr_value': {
+                        'atk': 54,
+                        'def': 34,
+                        'sp_atk': 0,
+                        'sp_def': 34,
+                        'spd': 43,
+                        'hp': 95,
+                        'percent': False,
+                        'total': 260,
+                    },
+                    'extra_attr_value': None,
+                    'hash': '7d529730',
+                }
+            ],
+            tags=['刻印', '全能刻印'],
+            description='全能刻印资源。',
+        )
 
 
 class AbilityPartORM(BaseResModelWithOptionalId, table=True):
@@ -308,6 +429,47 @@ class Mintmark(MintmarkBase, MintmarkResRefs, ConvertToORM['MintmarkORM']):
 
         raise ValueError(f'Invalid mintmark type: {self.type.id}')
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='刻印',
+            examples=[
+                {
+                    'type': {
+                        'id': 0,
+                        'url': 'https://api.seerapi.com/v1/mintmark_type/0',
+                    },
+                    'rarity': {
+                        'id': 1,
+                        'url': 'https://api.seerapi.com/v1/mintmark_rarity/1',
+                    },
+                    'pet': None,
+                    'id': 10017,
+                    'name': '中型速度刻印',
+                    'desc': '速度+10',
+                    'effect': None,
+                    'mintmark_class': None,
+                    'base_attr_value': None,
+                    'max_attr_value': {
+                        'atk': 0,
+                        'def': 0,
+                        'sp_atk': 0,
+                        'sp_def': 0,
+                        'spd': 10,
+                        'hp': 0,
+                        'percent': False,
+                        'total': 10,
+                    },
+                    'extra_attr_value': None,
+                    'skill': None,
+                    'hash': '35f335c7',
+                }
+            ],
+            tags=['刻印'],
+            description='刻印资源，返回的模型中同时包含能力/技能/全能刻印的相关字段，可通过type字段区分刻印类型。',
+        )
+
 
 class MintmarkORM(MintmarkBase, table=True):
     type_id: int = Field(foreign_key='mintmark_type.id')
@@ -368,8 +530,43 @@ class MintmarkRarityCategory(
         return MintmarkRarityCategoryORM
 
     def to_orm(self) -> 'MintmarkRarityCategoryORM':
-        return MintmarkRarityCategoryORM(
-            id=self.id,
+        return MintmarkRarityCategoryORM(id=self.id)
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='刻印稀有度分类',
+            examples=[
+                {
+                    'id': 5,
+                    'mintmark': [
+                        {
+                            'id': 41700,
+                            'url': 'https://api.seerapi.com/v1/mintmark/41700',
+                        },
+                        {
+                            'id': 41701,
+                            'url': 'https://api.seerapi.com/v1/mintmark/41701',
+                        },
+                        {
+                            'id': 41702,
+                            'url': 'https://api.seerapi.com/v1/mintmark/41702',
+                        },
+                        {
+                            'id': 41703,
+                            'url': 'https://api.seerapi.com/v1/mintmark/41703',
+                        },
+                        {
+                            'id': 41704,
+                            'url': 'https://api.seerapi.com/v1/mintmark/41704',
+                        },
+                    ],
+                    'hash': '8d04328d',
+                }
+            ],
+            tags=['刻印', '分类'],
+            description='刻印稀有度分类。',
         )
 
 
@@ -402,6 +599,36 @@ class MintmarkTypeCategory(MintmarkTypeBase, ConvertToORM['MintmarkTypeCategoryO
             name=self.name,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='刻印类型分类',
+            examples=[
+                {
+                    'id': 3,
+                    'name': 'universal',
+                    'mintmark': [
+                        {
+                            'id': 40001,
+                            'url': 'https://api.seerapi.com/v1/mintmark/40001',
+                        },
+                        {
+                            'id': 40002,
+                            'url': 'https://api.seerapi.com/v1/mintmark/40002',
+                        },
+                        {
+                            'id': 40003,
+                            'url': 'https://api.seerapi.com/v1/mintmark/40003',
+                        },
+                    ],
+                    'hash': '8opg02d2',
+                }
+            ],
+            tags=['刻印', '分类'],
+            description='刻印类型分类，分类能力/技能/全能刻印。',
+        )
+
 
 class MintmarkTypeCategoryORM(MintmarkTypeBase, table=True):
     mintmark: list['MintmarkORM'] = Relationship(
@@ -432,6 +659,76 @@ class MintmarkClassCategory(
         return MintmarkClassCategoryORM(
             id=self.id,
             name=self.name,
+        )
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='刻印系列分类',
+            examples=[
+                {
+                    'id': 91,
+                    'name': '和平星系列',
+                    'mintmark': [
+                        {
+                            'id': 42595,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42595',
+                        },
+                        {
+                            'id': 42596,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42596',
+                        },
+                        {
+                            'id': 42597,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42597',
+                        },
+                        {
+                            'id': 42598,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42598',
+                        },
+                        {
+                            'id': 42599,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42599',
+                        },
+                        {
+                            'id': 42600,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42600',
+                        },
+                        {
+                            'id': 42601,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42601',
+                        },
+                        {
+                            'id': 42602,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42602',
+                        },
+                        {
+                            'id': 42603,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42603',
+                        },
+                        {
+                            'id': 42604,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42604',
+                        },
+                        {
+                            'id': 42605,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42605',
+                        },
+                        {
+                            'id': 42606,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42606',
+                        },
+                        {
+                            'id': 42607,
+                            'url': 'https://api.seerapi.com/v1/mintmark/42607',
+                        },
+                    ],
+                    'hash': 'e36f8cd2',
+                }
+            ],
+            tags=['刻印', '全能刻印', '分类'],
+            description='刻印系列分类，用于分类全能刻印系列。',
         )
 
 

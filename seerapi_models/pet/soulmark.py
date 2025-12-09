@@ -8,6 +8,7 @@ from seerapi_models.build_model import (
     BaseResModel,
     ConvertToORM,
 )
+from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import EidEffectInUse, EidEffectInUseORM, ResourceRef
 
 if TYPE_CHECKING:
@@ -81,6 +82,40 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
             pve_effective=self.pve_effective,
         )
 
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='魂印',
+            examples=[
+                {
+                    'id': 2001,
+                    'desc': '自身登场之后首次受到攻击伤害时，记录此伤害；自身使用攻击技能后附加上述记录50%的百分比伤害，自身每携带一个攻击技能效果提升10%；自身使用属性技能后恢复上述记录50%的体力，自身每携带一个属性技能效果提升10%（boss无效）',
+                    'desc_formatting_adjustment': '\u003cindent=0\u003e\u003csprite=0\u003e\u003cindent=16\u003e登场效果：\r\n\u003cindent=16\u003e\u003csprite=3\u003e\u003cindent=32\u003e自身登场之后首次受到攻击伤害时，记录此伤害\r\n\r\n\u003cindent=0\u003e\u003csprite=0\u003e\u003cindent=16\u003e技能额外效果：\r\n\u003cindent=16\u003e\u003csprite=3\u003e\u003cindent=32\u003e自身使用攻击技能后\u003ccolor=#64F9FA\u003e附加\u003c/color\u003e上述记录50%的\u003cb\u003e百分比伤害\u003c/b\u003e，自身每携带一个攻击技能效果提升10%\r\n\u003cindent=16\u003e\u003csprite=3\u003e\u003cindent=32\u003e自身使用属性技能后\u003ccolor=#64F9FA\u003e恢复\u003c/color\u003e上述记录50%的\u003cb\u003e体力\u003c/b\u003e，自身每携带一个属性技能效果提升10%',
+                    'pve_effective': False,
+                    'intensified': False,
+                    'is_adv': False,
+                    'pet': [{'id': 4810, 'url': 'https://api.seerapi.com/v1/pet/4810'}],
+                    'effect': {
+                        'effect_args': [1, 0],
+                        'effect': {
+                            'id': 2426,
+                            'url': 'https://api.seerapi.com/v1/eid_effect/2426',
+                        },
+                    },
+                    'tag': [
+                        {'id': 6, 'url': 'https://api.seerapi.com/v1/soulmark_tag/6'},
+                        {'id': 15, 'url': 'https://api.seerapi.com/v1/soulmark_tag/15'},
+                    ],
+                    'intensified_to': None,
+                    'from': None,
+                    'hash': '17abd989',
+                }
+            ],
+            tags=['精灵', '魂印'],
+            description='魂印资源，该资源还整理了魂印的强化关系。',
+        )
+
 
 class SoulmarkORM(SoulmarkBase, table=True):
     pet: list['PetORM'] = Relationship(
@@ -136,6 +171,26 @@ class SoulmarkTagCategory(SoulmarkTagBase, ConvertToORM['SoulmarkTagORM']):
         return SoulmarkTagORM(
             id=self.id,
             name=self.name,
+        )
+
+    @classmethod
+    def get_api_comment(cls) -> APIComment:
+        return APIComment(
+            name_en=cls.resource_name(),
+            name_cn='魂印标签',
+            examples=[
+                {
+                    'id': 6,
+                    'name': '恢复',
+                    'soulmark': [
+                        {'id': 6, 'url': 'https://api.seerapi.com/v1/soulmark/6'},
+                        {'id': 7, 'url': 'https://api.seerapi.com/v1/soulmark/7'},
+                    ],
+                    'hash': '67yh89pk',
+                },
+            ],
+            tags=['精灵', '魂印', '分类'],
+            description='魂印标签，例如强攻，断回合等。',
         )
 
 
