@@ -125,6 +125,11 @@ class GemGen1(GemBase, GemResRefs):
     fail_compensate_range: tuple[int, int] = Field(
         description='当镶嵌失败时返还的宝石的等级范围'
     )
+
+    @classmethod
+    def resource_name(cls) -> str:
+        return 'gem_gen1'
+
     @classmethod
     def get_api_comment(cls) -> APIComment:
         return APIComment(
@@ -171,6 +176,10 @@ class GemGen1(GemBase, GemResRefs):
 
 class GemGen2(GemBase, GemResRefs):
     upgrade_cost: int = Field(description='升级到该等级需要的石之砂数量')
+
+    @classmethod
+    def resource_name(cls) -> str:
+        return 'gem_gen2'
 
     @classmethod
     def get_api_comment(cls) -> APIComment:
