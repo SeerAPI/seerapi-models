@@ -5,6 +5,7 @@ from sqlmodel import Field, Relationship, SQLModel
 from seerapi_models.build_model import (
     BaseCategoryModel,
     BaseResModel,
+    BaseResModelWithOptionalId,
     ConvertToORM,
 )
 from seerapi_models.build_model.comment import APIComment
