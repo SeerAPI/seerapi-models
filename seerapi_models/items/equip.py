@@ -16,7 +16,7 @@ from seerapi_models.common import (
     EidEffectInUseORM,
     ResourceRef,
     SixAttributes,
-    SixAttributesORM,
+    SixAttributesORMBase,
 )
 from seerapi_models.items._common import Item, ItemORM
 
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from seerapi_models.pet import Pet, PetORM
 
 
-class SuitBonusAttrORM(SixAttributesORM, table=True):
+class SuitBonusAttrORM(SixAttributesORMBase, table=True):
     suit_bonus: 'SuitBonusORM' = Relationship(
         back_populates='attribute',
     )
@@ -34,7 +34,7 @@ class SuitBonusAttrORM(SixAttributesORM, table=True):
         return 'suit_bonus_attr'
 
 
-class EquipBonusAttrORM(SixAttributesORM, table=True):
+class EquipBonusAttrORM(SixAttributesORMBase, table=True):
     equip_bonus: 'EquipBonusORM' = Relationship(
         back_populates='attribute',
     )

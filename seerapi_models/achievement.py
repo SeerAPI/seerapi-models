@@ -5,7 +5,7 @@ from sqlmodel import Field, Relationship, SQLModel
 
 from seerapi_models.build_model import BaseCategoryModel, BaseResModel, ConvertToORM
 from seerapi_models.build_model.comment import APIComment
-from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
+from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORMBase
 
 
 class AchievementCategoryNameEnum(str, Enum):
@@ -27,7 +27,7 @@ class TitleInfoMixin(SQLModel):
     original_name: str = Field(description='称号原始名称，包含分隔符')
 
 
-class TitleAttrBonusORM(SixAttributesORM, table=True):
+class TitleAttrBonusORM(SixAttributesORMBase, table=True):
     id: int | None = Field(
         default=None,
         primary_key=True,

@@ -9,7 +9,7 @@ from seerapi_models.build_model import (
     ConvertToORM,
 )
 from seerapi_models.build_model.comment import APIComment
-from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
+from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORMBase
 
 if TYPE_CHECKING:
     from seerapi_models.element_type import TypeCombination, TypeCombinationORM
@@ -32,7 +32,7 @@ if TYPE_CHECKING:
     )
 
 
-class BaseStatORM(SixAttributesORM, table=True):
+class BaseStatORM(SixAttributesORMBase, table=True):
     id: int | None = Field(
         default=None,
         primary_key=True,
@@ -50,7 +50,7 @@ class BaseStatORM(SixAttributesORM, table=True):
         return 'pet_base_stats'
 
 
-class YieldingEvORM(SixAttributesORM, table=True):
+class YieldingEvORM(SixAttributesORMBase, table=True):
     id: int | None = Field(default=None, primary_key=True, foreign_key='pet.id')
     pet: 'PetORM' = Relationship(
         back_populates='yielding_ev',

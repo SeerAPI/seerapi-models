@@ -428,14 +428,8 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             percent=self.percent,
         )
 
-    @classmethod
-    def resource_name(cls) -> str:
-        return 'six_attributes'
 
-
-class SixAttributes(
-    SixAttributesBase, BaseGeneralModel, ConvertToORM['SixAttributesORM']
-):
+class SixAttributes(SixAttributesBase, BaseGeneralModel):
     @computed_field
     @property
     def total(self) -> float:
@@ -443,22 +437,11 @@ class SixAttributes(
         return self.atk + self.def_ + self.sp_atk + self.sp_def + self.spd + self.hp
 
     @classmethod
-    def get_orm_model(cls) -> type['SixAttributesORM']:
-        return SixAttributesORM
-
-    def to_orm(self) -> 'SixAttributesORM':
-        return SixAttributesORM(
-            atk=self.atk,
-            def_=self.def_,
-            sp_atk=self.sp_atk,
-            sp_def=self.sp_def,
-            spd=self.spd,
-            hp=self.hp,
-            percent=self.percent,
-        )
+    def resource_name(cls) -> str:
+        return 'six_attributes'
 
 
-class SixAttributesORM(SixAttributesBase):
+class SixAttributesORMBase(SixAttributesBase):
     model_config = ConfigDict(ignored_types=(declared_attr,))  # type: ignore
 
     @declared_attr
@@ -546,7 +529,7 @@ __all__ = [
     'ResourceRef',
     'SixAttributes',
     'SixAttributesBase',
-    'SixAttributesORM',
+    'SixAttributesORMBase',
     'SkillEffectInUse',
     'SkillEffectInUseBase',
     'SkillEffectInUseORM',

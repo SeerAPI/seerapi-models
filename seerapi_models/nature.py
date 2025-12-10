@@ -2,10 +2,10 @@ from sqlmodel import Field, Relationship
 
 from seerapi_models.build_model import BaseResModel, ConvertToORM
 from seerapi_models.build_model.comment import APIComment
-from seerapi_models.common import SixAttributes, SixAttributesORM
+from seerapi_models.common import SixAttributes, SixAttributesORMBase
 
 
-class NatureAttrORM(SixAttributesORM, table=True):
+class NatureAttrORM(SixAttributesORMBase, table=True):
     id: int | None = Field(
         default=None,
         primary_key=True,

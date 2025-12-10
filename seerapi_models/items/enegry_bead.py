@@ -9,7 +9,7 @@ from seerapi_models.common import (
     EidEffectInUseORM,
     ResourceRef,
     SixAttributes,
-    SixAttributesORM,
+    SixAttributesORMBase,
 )
 
 from ._common import Item, ItemORM
@@ -114,7 +114,7 @@ class EnergyBeadORM(EnergyBeadBase, table=True):
     item: 'ItemORM' = Relationship(back_populates='energy_bead')
 
 
-class EnergyBeadBuffAttrORM(SixAttributesORM, table=True):
+class EnergyBeadBuffAttrORM(SixAttributesORMBase, table=True):
     id: int | None = Field(
         default=None,
         primary_key=True,

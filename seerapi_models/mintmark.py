@@ -10,7 +10,7 @@ from seerapi_models.build_model import (
     ConvertToORM,
 )
 from seerapi_models.build_model.comment import APIComment
-from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORM
+from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORMBase
 
 if TYPE_CHECKING:
     from .pet import Pet, PetORM
@@ -24,7 +24,7 @@ class SkillMintmarkLink(SQLModel, table=True):
     )
 
 
-class MintmarkMaxAttrORM(SixAttributesORM, table=True):
+class MintmarkMaxAttrORM(SixAttributesORMBase, table=True):
     ability_mintmark: list['AbilityPartORM'] = Relationship(
         back_populates='max_attr_value',
     )
@@ -37,7 +37,7 @@ class MintmarkMaxAttrORM(SixAttributesORM, table=True):
         return 'mintmark_max_attr'
 
 
-class MintmarkBaseAttrORM(SixAttributesORM, table=True):
+class MintmarkBaseAttrORM(SixAttributesORMBase, table=True):
     universal_mintmark: list['UniversalPartORM'] = Relationship(
         back_populates='base_attr_value',
     )
@@ -47,7 +47,7 @@ class MintmarkBaseAttrORM(SixAttributesORM, table=True):
         return 'mintmark_base_attr'
 
 
-class MintmarkExtraAttrORM(SixAttributesORM, table=True):
+class MintmarkExtraAttrORM(SixAttributesORMBase, table=True):
     universal_mintmark: list['UniversalPartORM'] = Relationship(
         back_populates='extra_attr_value',
     )
