@@ -4,8 +4,6 @@ from typing import Generic, TypeVar
 from sqlalchemy.orm import declared_attr
 from sqlmodel import Field, SQLModel
 
-from seerapi_models.build_model.comment import APIComment
-
 _TModel = TypeVar('_TModel', bound=SQLModel)
 
 
@@ -66,7 +64,6 @@ class BaseCategoryModel(BaseResModel, ABC, Generic[_TModel]): ...
 
 
 __all__ = [
-    'APIComment',
     'BaseCategoryModel',
     'BaseGeneralModel',
     'BaseResModel',

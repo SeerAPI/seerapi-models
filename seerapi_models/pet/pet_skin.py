@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from sqlmodel import Field, Relationship
 
 from seerapi_models.build_model import BaseResModel, ConvertToORM
-from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef
 
 if TYPE_CHECKING:
@@ -43,30 +42,6 @@ class PetSkin(PetSkinBase, ConvertToORM['PetSkinORM']):
             category_id=self.category.id,
         )
 
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='精灵皮肤',
-            examples=[
-                {
-                    'id': 774,
-                    'name': '世界之脉·圣灵谱尼',
-                    'resource_id': 1400774,
-                    'enemy_resource_id': None,
-                    'pet': {'id': 5000, 'url': 'https://api.seerapi.com/v1/pet/5000'},
-                    'category': {
-                        'id': 19,
-                        'url': 'https://api.seerapi.com/v1/pet_skin_category/19',
-                    },
-                    'hash': '1ba76eb6',
-                }
-            ],
-            tags=['皮肤', '精灵'],
-            description='精灵皮肤资源，如果要通过该资源获取立绘/头像等，'
-            '请使用 resource_id 字段作为资源ID。',
-        )
-
 
 class PetSkinORM(PetSkinBase, table=True):
     pet_id: int = Field(foreign_key='pet.id')
@@ -97,25 +72,6 @@ class PetSkinCategory(PetSkinCategoryBase, ConvertToORM['PetSkinCategoryORM']):
 
     def to_orm(self) -> 'PetSkinCategoryORM':
         return PetSkinCategoryORM(id=self.id)
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='精灵皮肤系列',
-            examples=[
-                {
-                    'id': 19,
-                    'skins': [
-                        {'id': 774, 'url': 'https://api.seerapi.com/v1/pet_skin/774'},
-                        {'id': 775, 'url': 'https://api.seerapi.com/v1/pet_skin/775'},
-                    ],
-                    'hash': '50d67dd4',
-                }
-            ],
-            tags=['皮肤', '精灵', '分类'],
-            description='精灵皮肤系列，用于分类不同系列的精灵皮肤。由于皮肤分类的名称在游戏内是硬编码的，暂不支持获取。',
-        )
 
 
 class PetSkinCategoryORM(PetSkinCategoryBase, table=True):
