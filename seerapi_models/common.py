@@ -22,8 +22,6 @@ from pydantic import (
 from sqlalchemy.orm import column_property, declared_attr
 from sqlmodel import JSON, Column, Computed, Field, Numeric, Relationship
 
-from seerapi_models.build_model.comment import APIComment
-
 from ._utils import move_to_last
 from .build_model import (
     BaseGeneralModel,
@@ -230,18 +228,6 @@ class EidEffect(BaseResModel, BaseGeneralModel, ConvertToORM['EidEffectORM']):
 
     def to_orm(self) -> 'EidEffectORM':
         return EidEffectORM(id=self.id, args_num=self.args_num)
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='eid效果',
-            examples=[],
-            tags=['eid效果'],
-            description='该资源描述并整理了赛尔号内部实现的一种通用效果，'
-            '魂印，特性，装备，能量珠效果在内部都通过 eid 描述，'
-            '同一 eid 效果可视作判定完全相同的效果，即使它们的类型不同。',
-        )
 
 
 class EidEffectORM(EidEffect, table=True):

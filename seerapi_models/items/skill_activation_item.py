@@ -1,7 +1,6 @@
 from sqlmodel import Field, Relationship
 
 from seerapi_models.build_model import BaseResModel, ConvertToORM
-from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef
 from seerapi_models.pet import Pet, SkillInPetORM
 from seerapi_models.skill import Skill
@@ -31,32 +30,6 @@ class SkillActivationItem(
     @classmethod
     def get_orm_model(cls) -> type['SkillActivationItemORM']:
         return SkillActivationItemORM
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='精灵技能激活道具',
-            examples=[
-                {
-                    'id': 1725369,
-                    'name': '龙吟咖啡',
-                    'item_number': 3,
-                    'item': {
-                        'id': 1725369,
-                        'url': 'https://api.seerapi.com/v1/item/1725369',
-                    },
-                    'skill': {
-                        'id': 28355,
-                        'url': 'https://api.seerapi.com/v1/skill/28355',
-                    },
-                    'pet': {'id': 4401, 'url': 'https://api.seerapi.com/v1/pet/4401'},
-                    'hash': 'b7c9c4ef',
-                }
-            ],
-            tags=['技能激活道具', '道具', '技能', '精灵'],
-            description='精灵技能激活道具，返回的模型中包含技能和精灵相关的引用，以及激活该技能所需的道具数量。',
-        )
 
     def to_orm(self) -> 'SkillActivationItemORM':
         return SkillActivationItemORM(

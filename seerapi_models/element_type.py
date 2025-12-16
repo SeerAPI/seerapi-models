@@ -4,7 +4,6 @@ from pydantic import computed_field
 from sqlmodel import Boolean, Column, Computed, Field, Relationship
 
 from seerapi_models.build_model import BaseResModel, ConvertToORM
-from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import ResourceRef
 
 if TYPE_CHECKING:
@@ -30,19 +29,6 @@ class ElementType(BaseResModel, ConvertToORM['ElementTypeORM']):
             id=self.id,
             name=self.name,
             name_en=self.name_en,
-        )
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='属性',
-            examples=[
-                {'id': 16, 'name': '圣灵', 'name_en': 'saint', 'hash': '9062249d'}
-            ],
-            tags=['属性'],
-            description='属性资源，该资源仅作为基础资源，保存属性克制关系（TODO）等数据。'
-            '不包含双属性数据，实际使用时请使用 TypeCombination 资源。',
         )
 
 
@@ -94,33 +80,6 @@ class TypeCombination(TypeCombinationBase, ConvertToORM['TypeCombinationORM']):
             name_en=self.name_en,
             primary_id=self.primary.id,
             secondary_id=self.secondary.id if self.secondary else None,
-        )
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='属性组合',
-            examples=[
-                {
-                    'id': 100,
-                    'name': '圣灵 地面',
-                    'name_en': 'saint_ground',
-                    'primary': {
-                        'id': 16,
-                        'url': 'https://api.seerapi.com/v1/element_type/16',
-                    },
-                    'secondary': {
-                        'id': 7,
-                        'url': 'https://api.seerapi.com/v1/element_type/7',
-                    },
-                    'is_double': True,
-                    'hash': '637da042',
-                }
-            ],
-            tags=['属性', '组合'],
-            description='属性组合资源，所有包含所有的单属性和双属性数据。'
-            '注意“第一属性”和“第二属性”仅为了区分两个属性，游戏内并无主次之分。',
         )
 
 

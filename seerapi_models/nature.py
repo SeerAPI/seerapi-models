@@ -1,7 +1,6 @@
 from sqlmodel import Field, Relationship
 
 from seerapi_models.build_model import BaseResModel, ConvertToORM
-from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import SixAttributes, SixAttributesORMBase
 
 
@@ -47,34 +46,6 @@ class Nature(BaseNature, ConvertToORM['NatureORM']):
             attributes=NatureAttrORM(
                 **self.attributes.model_dump(),
             ),
-        )
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='性格',
-            examples=[
-                {
-                    'id': 2,
-                    'name': '调皮',
-                    'des': '提升攻击 降低特防',
-                    'des2': '攻击+10% ,特防-10%',
-                    'attributes': {
-                        'atk': 1,
-                        'def': 0.9,
-                        'sp_atk': 1.1,
-                        'sp_def': 1,
-                        'spd': 1,
-                        'hp': 1,
-                        'percent': True,
-                        'total': 5,
-                    },
-                    'hash': 'c99d35ae',
-                }
-            ],
-            tags=['性格'],
-            description='性格修正资源。',
         )
 
 

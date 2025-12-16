@@ -10,7 +10,6 @@ from seerapi_models.build_model import (
     BaseResModelWithOptionalId,
     ConvertToORM,
 )
-from seerapi_models.build_model.comment import APIComment
 from seerapi_models.common import (
     EidEffectInUse,
     EidEffectInUseORM,
@@ -221,66 +220,6 @@ class SuitBase(BaseResModel):
     def resource_name(cls) -> str:
         return 'suit'
 
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='套装',
-            examples=[
-                {
-                    'id': 393,
-                    'name': '笑傲巅峰套装',
-                    'transform': False,
-                    'tran_speed': 0,
-                    'suit_desc': '赛尔们在冒险中获得的套装，能够改变外观或者增强力量',
-                    'equips': [
-                        {
-                            'id': 1300794,
-                            'url': 'https://api.seerapi.com/v1/equip/1300794',
-                        },
-                        {
-                            'id': 1300795,
-                            'url': 'https://api.seerapi.com/v1/equip/1300795',
-                        },
-                        {
-                            'id': 1300796,
-                            'url': 'https://api.seerapi.com/v1/equip/1300796',
-                        },
-                        {
-                            'id': 1300797,
-                            'url': 'https://api.seerapi.com/v1/equip/1300797',
-                        },
-                    ],
-                    'bonus': {
-                        'newse_id': 7745,
-                        'eid_effect': {
-                            'effect_args': [10, 15, 1, 1, 4, 13, 1],
-                            'effect': {
-                                'id': 1271,
-                                'url': 'https://api.seerapi.com/v1/eid_effect/1271',
-                            },
-                        },
-                        'id': 393,
-                        'desc': '背包内精灵全属性+10%；己方精灵造成的致命一击伤害提升15%；攻击技能有1/16的几率打出致命一击，每次使用增加1/16，最高4/16，未打出致命一击则造成伤害前附加自身最大体力13%的百分比伤害（仅限赛尔与赛尔间对战）',
-                        'effective_pets': [],
-                        'attribute': {
-                            'atk': 10,
-                            'def': 10,
-                            'sp_atk': 10,
-                            'sp_def': 10,
-                            'spd': 10,
-                            'hp': 10,
-                            'percent': False,
-                            'total': 60,
-                        },
-                    },
-                    'hash': 'c0fe9e5',
-                }
-            ],
-            tags=['装备', '套装'],
-            description='赛尔套装。',
-        )
-
 
 class Suit(SuitBase, ConvertToORM['SuitORM']):
     equips: list[ResourceRef['Equip']] = Field(
@@ -324,57 +263,6 @@ class EquipBase(BaseResModel):
     @classmethod
     def resource_name(cls) -> str:
         return 'equip'
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='部件',
-            examples=[
-                {
-                    'id': 1300694,
-                    'name': '典狱长头盔',
-                    'speed': 0,
-                    'item': {
-                        'id': 1300694,
-                        'url': 'https://api.seerapi.com/v1/item/1300694',
-                    },
-                    'bonus': {
-                        'newse_id': None,
-                        'eid_effect': None,
-                        'desc': '背包内精灵命中+4%',
-                        'attribute': {
-                            'atk': 0,
-                            'def': 0,
-                            'sp_atk': 0,
-                            'sp_def': 0,
-                            'spd': 0,
-                            'hp': 0,
-                            'percent': True,
-                            'total': 0,
-                        },
-                        'other_attribute': {
-                            'hit_rate': 4,
-                            'dodge_rate': 0,
-                            'crit_rate': 0,
-                        },
-                    },
-                    'occasion': {
-                        'id': 0,
-                        'url': 'https://api.seerapi.com/v1/equip_effective_occasion/0',
-                    },
-                    'suit': {'id': 370, 'url': 'https://api.seerapi.com/v1/suit/370'},
-                    'part_type': {
-                        'id': 0,
-                        'url': 'https://api.seerapi.com/v1/equip_type/0',
-                    },
-                    'pk_attribute': {'pk_hp': 60, 'pk_atk': 25, 'pk_fire_range': 0},
-                    'hash': '557fce0f',
-                }
-            ],
-            tags=['装备', '部件'],
-            description='赛尔装备部件。',
-        )
 
 
 class Equip(EquipBase, ConvertToORM['EquipORM']):
@@ -446,32 +334,6 @@ class EquipTypeBase(BaseCategoryModel):
     def resource_name(cls) -> str:
         return 'equip_type'
 
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='部件类型',
-            examples=[
-                {
-                    'id': 4,
-                    'name': 'foot',
-                    'equip': [
-                        {
-                            'id': 100829,
-                            'url': 'https://api.seerapi.com/v1/equip/100829',
-                        },
-                        {
-                            'id': 100826,
-                            'url': 'https://api.seerapi.com/v1/equip/100826',
-                        },
-                    ],
-                    'hash': '557fce0f',
-                }
-            ],
-            tags=['装备', '部件', '分类'],
-            description='赛尔装备部件类型，分为头部，手部，腰部，脚部，背景，星际座驾。',
-        )
-
 
 class EquipType(EquipTypeBase, ConvertToORM['EquipTypeORM']):
     equip: list[ResourceRef] = Field(default_factory=list, description='部件列表')
@@ -499,32 +361,6 @@ class EquipEffectiveOccasionBase(BaseCategoryModel):
     @classmethod
     def resource_name(cls) -> str:
         return 'equip_effective_occasion'
-
-    @classmethod
-    def get_api_comment(cls) -> APIComment:
-        return APIComment(
-            name_en=cls.resource_name(),
-            name_cn='部件能力加成生效场合',
-            examples=[
-                {
-                    'id': 0,
-                    'description': '全部战斗有效',
-                    'equip': [
-                        {
-                            'id': 100526,
-                            'url': 'https://api.seerapi.com/v1/equip/100526',
-                        },
-                        {
-                            'id': 100525,
-                            'url': 'https://api.seerapi.com/v1/equip/100525',
-                        },
-                    ],
-                    'hash': '557fce0f',
-                }
-            ],
-            tags=['装备', '部件', '分类'],
-            description='赛尔能力加成装备生效场合，分为全部，仅赛尔间对战（PVP），仅对Boss有效（PVE）。',
-        )
 
 
 class EquipEffectiveOccasion(
