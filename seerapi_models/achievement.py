@@ -116,6 +116,9 @@ class Achievement(
             is_hide=self.is_hide,
             type_id=self.type.id,
             branch_id=self.branch.id,
+            next_level_achievement_id=self.next_level_achievement.id
+            if self.next_level_achievement
+            else None,
             title_part=title_part,
         )
 
