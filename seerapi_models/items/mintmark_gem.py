@@ -28,6 +28,10 @@ class GemBase(BaseResModel):
 
 
 class GemResRefs(SQLModel):
+    prev_level_gem: ResourceRef['Gem'] | None = Field(
+        default=None,
+        description='该宝石的上一等级的引用，当为None时表示该宝石为最低等级',
+    )
     next_level_gem: ResourceRef['Gem'] | None = Field(
         default=None,
         description='该宝石的下一等级的引用，当为None时表示该宝石为最高等级',
@@ -91,6 +95,7 @@ class Gem(GemBase, GemResRefs, ConvertToORM['GemORM']):
             'generation_id': self.generation_id,
             'category': self.category,
             'effect': self.effect,
+            'prev_level_gem': self.prev_level_gem,
             'next_level_gem': self.next_level_gem,
             'item': self.item,
         }
@@ -129,9 +134,20 @@ class GemGen2(GemBase, GemResRefs):
 
 
 class GemORM(GemBase, table=True):
-    next_level_gem_id: int | None = Field(
-        default=None,
-        description='该宝石的下一等级的引用，当为None时表示该宝石为最高等级',
+    prev_level_gem: Optional['GemORM'] = Relationship(
+        back_populates='next_level_gem',
+        sa_relationship_kwargs={
+            'uselist': False,
+        },
+    )
+    next_level_gem_id: int | None = Field(default=None, foreign_key='gem.id')
+    next_level_gem: Optional['GemORM'] = Relationship(
+        back_populates='prev_level_gem',
+        sa_relationship_kwargs={
+            'primaryjoin': 'GemORM.next_level_gem_id == GemORM.id',
+            'remote_side': 'GemORM.id',
+            'uselist': False,
+        },
     )
     category_id: int = Field(foreign_key='gem_category.id')
     generation: 'GemGenCategoryORM' = Relationship(
