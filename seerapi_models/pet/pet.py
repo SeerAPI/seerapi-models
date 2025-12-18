@@ -18,6 +18,12 @@ if TYPE_CHECKING:
         SuitBonusORM,
     )
     from seerapi_models.mintmark import MintmarkORM
+    from seerapi_models.peak_pool import (
+        PeakExpertPool,
+        PeakExpertPoolORM,
+        PeakPool,
+        PeakPoolORM,
+    )
     from seerapi_models.skill import Skill, SkillORM
 
     from . import (
@@ -204,6 +210,12 @@ class Pet(PetBase, ConvertToORM['PetORM']):
     archive_story_entry: ResourceRef['PetArchiveStoryEntry'] | None = Field(
         default=None, description='精灵故事条目'
     )
+    peak_pool: ResourceRef['PeakPool'] | None = Field(
+        default=None, description='精灵所属巅峰池'
+    )
+    peak_expert_pool: ResourceRef['PeakExpertPool'] | None = Field(
+        default=None, description='精灵所属巅峰专家池'
+    )
 
     @classmethod
     def get_orm_model(cls) -> 'type[PetORM]':
@@ -259,6 +271,10 @@ class Pet(PetBase, ConvertToORM['PetORM']):
             diy_stats=diy_stats,
             resource_id=self.resource_id,
             enemy_resource_id=self.enemy_resource_id,
+            peak_pool_id=self.peak_pool.id if self.peak_pool else None,
+            peak_expert_pool_id=self.peak_expert_pool.id
+            if self.peak_expert_pool
+            else None,
         )
 
 
@@ -345,6 +361,12 @@ class PetORM(PetBase, table=True):
             'primaryjoin': 'PetORM.id == PetArchiveStoryEntryORM.pet_id',
         },
     )
+    peak_pool_id: int | None = Field(default=None, foreign_key='peak_pool.id')
+    peak_pool: Optional['PeakPoolORM'] = Relationship(back_populates='pet')
+    peak_expert_pool_id: int | None = Field(
+        default=None, foreign_key='peak_expert_pool.id'
+    )
+    peak_expert_pool: Optional['PeakExpertPoolORM'] = Relationship(back_populates='pet')
 
 
 class PetClassBase(BaseResModel):
