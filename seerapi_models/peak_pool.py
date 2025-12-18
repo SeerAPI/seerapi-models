@@ -23,7 +23,7 @@ class BasePeakPool(BaseResModel):
 
 
 class PeakPool(BasePeakPool, ConvertToORM['PeakPoolORM']):
-    pets: list[ResourceRef['Pet']] = Field(
+    pet: list[ResourceRef['Pet']] = Field(
         default_factory=list, description='该池内的精灵'
     )
 
@@ -41,7 +41,7 @@ class PeakPool(BasePeakPool, ConvertToORM['PeakPoolORM']):
 
 
 class PeakPoolORM(BasePeakPool, table=True):
-    pets: list['PetORM'] = Relationship(back_populates='peak_pools')
+    pet: list['PetORM'] = Relationship(back_populates='peak_pool')
 
 
 class BasePeakExpertPool(BaseResModel):
@@ -75,4 +75,4 @@ class PeakExpertPool(BasePeakExpertPool, ConvertToORM['PeakExpertPoolORM']):
 
 
 class PeakExpertPoolORM(BasePeakExpertPool, table=True):
-    pet: list['PetORM'] = Relationship(back_populates='peak_expert_pools')
+    pet: list['PetORM'] = Relationship(back_populates='peak_expert_pool')
