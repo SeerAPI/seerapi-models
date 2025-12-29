@@ -28,6 +28,9 @@ class SkillStoneEffectLink(SQLModel, table=True):
 
 
 class SkillStoneEffectBase(BaseResModelWithOptionalId):
+    inner_id: int = Field(
+        description='技能石效果的内部ID，当技能石为完美技能石时，会使用此ID表示效果'
+    )
     prob: float = Field(description='技能石效果激活概率，0到1之间')
 
     @classmethod
@@ -74,6 +77,7 @@ class SkillStone(SkillStoneBase, ConvertToORM['SkillStoneORM']):
         effect_orms = [
             SkillStoneEffectORM(
                 id=effect.id,
+                inner_id=effect.inner_id,
                 prob=effect.prob,
                 skill_stone_id=self.id,
                 effect=[e.to_orm() for e in effect.effect],
