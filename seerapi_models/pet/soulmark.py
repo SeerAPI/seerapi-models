@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, ClassVar, Optional
 
 from pydantic import AliasChoices
 from sqlmodel import Field, Relationship, SQLModel
@@ -49,8 +49,13 @@ class SoulmarkBase(BaseResModel):
 
 
 class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
+    __name_fields__: ClassVar[list[str]] = ['effect_alias']
+
     pet: list[ResourceRef['Pet']] = Field(description='可持有该魂印的精灵ID')
     effect: EidEffectInUse | None = Field(description='魂印效果')
+    effect_alias: str | None = Field(
+        default=None, description='效果别名，命名规则为：[效果名称]_[参数1]_[参数2]_…'
+    )
     tag: list[ResourceRef['SoulmarkTagCategory']] = Field(
         description='魂印标签，例如强攻，断回合等'
     )

@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from sqlmodel import Field, Relationship
 
 from seerapi_models.build_model import BaseCategoryModel, BaseResModel, ConvertToORM
@@ -14,7 +16,11 @@ class EffectSeDataBase(BaseResModel):
 
 
 class EffectSeData(EffectSeDataBase):
+    __name_fields__: ClassVar[list[str]] = ['name', 'effect_alias']
     effect: EidEffectInUse = Field(description='效果')
+    effect_alias: str = Field(
+        description='效果别名，命名规则为：[效果名称]_[参数1]_[参数2]_…'
+    )
 
 
 class EffectSeDataORM(EffectSeDataBase):
