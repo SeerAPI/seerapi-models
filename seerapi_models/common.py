@@ -340,33 +340,57 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             percent=percent,
         )
 
+
+class SixAttributes(SixAttributesBase, BaseGeneralModel):
+    @computed_field
+    @property
+    def total(self) -> float:
+        """总属性值"""
+        return self.atk + self.def_ + self.sp_atk + self.sp_def + self.spd + self.hp
+
+    @classmethod
+    def resource_name(cls) -> str:
+        return 'six_attributes'
+
     def _calc_number(
         self,
         other: 'SixAttributesBase',
         *,
         operator: Literal['add', 'sub', 'percent_mul', 'percent_div'],
+        swap: bool = False,
     ) -> Self:
+        """逐属性计算，swap=True 时交换 self 和 other 的运算位置"""
         keys = ['atk', 'def_', 'sp_atk', 'sp_def', 'spd', 'hp']
-        values = []
+        values: list[int | float] = []
         for key in keys:
-            val: int
+            if swap:
+                left, right = getattr(other, key), getattr(self, key)
+            else:
+                left, right = getattr(self, key), getattr(other, key)
+
             if operator == 'add':
-                val = getattr(self, key) + getattr(other, key)
+                val = left + right
             elif operator == 'sub':
-                val = getattr(self, key) - getattr(other, key)
+                val = left - right
             elif operator == 'percent_mul':
-                val = getattr(self, key) * (1 + getattr(other, key) / 100)
+                val = left * (1 + right / 100)
             elif operator == 'percent_div':
-                val = getattr(self, key) * (1 - getattr(other, key) / 100)
+                val = left * (1 - right / 100)
 
             values.append(val)
 
-        return type(self)(**dict(zip(keys, values)))
+        return type(self)(
+            atk=values[0],
+            def_=values[1],
+            sp_atk=values[2],
+            sp_def=values[3],
+            spd=values[4],
+            hp=values[5],
+        )
 
     def __add__(self, other) -> Self:
         """两个六维属性相加"""
-        cls = type(self)
-        if not isinstance(other, cls):
+        if not isinstance(other, SixAttributesBase):
             raise TypeError(f'Cannot add {type(self)} and {type(other)}')
 
         if self.percent and other.percent:
@@ -375,7 +399,7 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             return obj
         elif self.percent or other.percent:
             if self.percent:
-                obj = other._calc_number(self, operator='percent_mul')
+                obj = self._calc_number(other, operator='percent_mul', swap=True)
             else:
                 obj = self._calc_number(other, operator='percent_mul')
             obj.percent = False
@@ -385,8 +409,7 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
 
     def __sub__(self, other) -> Self:
         """两个六维属性相减"""
-        cls = type(self)
-        if not isinstance(other, cls):
+        if not isinstance(other, SixAttributesBase):
             raise TypeError(f'Cannot sub {type(self)} and {type(other)}')
 
         if self.percent and other.percent:
@@ -395,7 +418,7 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             return obj
         elif self.percent or other.percent:
             if self.percent:
-                obj = other._calc_number(self, operator='percent_div')
+                obj = self._calc_number(other, operator='percent_div', swap=True)
             else:
                 obj = self._calc_number(other, operator='percent_div')
             obj.percent = False
@@ -413,18 +436,6 @@ class SixAttributesBase(BaseResModelWithOptionalId, BaseGeneralModel):
             hp=round(self.hp, ndigits),
             percent=self.percent,
         )
-
-
-class SixAttributes(SixAttributesBase, BaseGeneralModel):
-    @computed_field
-    @property
-    def total(self) -> float:
-        """总属性值"""
-        return self.atk + self.def_ + self.sp_atk + self.sp_def + self.spd + self.hp
-
-    @classmethod
-    def resource_name(cls) -> str:
-        return 'six_attributes'
 
 
 class SixAttributesORMBase(SixAttributesBase):
