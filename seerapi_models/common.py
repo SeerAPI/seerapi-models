@@ -440,6 +440,17 @@ class SixAttributesORMBase(SixAttributesBase):
             )
         )
 
+    def to_model(self) -> 'SixAttributes':
+        return SixAttributes(
+            atk=self.atk,
+            def_=self.def_,
+            sp_atk=self.sp_atk,
+            sp_def=self.sp_def,
+            spd=self.spd,
+            hp=self.hp,
+            percent=self.percent,
+        )
+
 
 class SkillEffectInUseBase(BaseResModelWithOptionalId):
     """描述一条“使用中的”技能效果"""
