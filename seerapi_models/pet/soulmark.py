@@ -70,6 +70,7 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
         },
     )
     advance: ResourceRef['PetAdvance'] | None = Field(
+        default=None,
         description='觉醒后的魂印资源，该字段仅在该魂印是神谕觉醒魂印时有效',
     )
 
