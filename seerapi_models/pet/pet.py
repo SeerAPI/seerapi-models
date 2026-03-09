@@ -12,6 +12,7 @@ from seerapi_models.common import ResourceRef, SixAttributes, SixAttributesORMBa
 
 if TYPE_CHECKING:
     from seerapi_models.element_type import TypeCombination, TypeCombinationORM
+    from seerapi_models.glossary import GlossaryEntryORM
     from seerapi_models.items import (
         SkillActivationItem,
         SkillActivationItemORM,
@@ -376,6 +377,12 @@ class PetORM(PetBase, table=True):
         back_populates='pet',
         sa_relationship_kwargs={
             'uselist': False,
+        },
+    )
+    glossary_entry: list['GlossaryEntryORM'] = Relationship(
+        back_populates='pet',
+        sa_relationship_kwargs={
+            'secondary': 'petglossaryentrylink',
         },
     )
 

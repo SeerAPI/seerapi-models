@@ -124,6 +124,7 @@ class SkillEffectTypeBase(BaseResModel):
         default=None,
         description='效果描述的"可格式化版本"，用于呈现Unity端中的多行描述形式',
     )
+    analyze_info: str = Field(description='新版 Unity 端采用的格式化技能效果描述文本')
     pve_effective: bool = Field(description='该效果是否PVE生效')
 
     @classmethod
@@ -153,6 +154,7 @@ class SkillEffectType(SkillEffectTypeBase, ConvertToORM['SkillEffectTypeORM']):
             info=self.info,
             pve_effective=self.pve_effective,
             info_formatting_adjustment=self.info_formatting_adjustment,
+            analyze_info=self.analyze_info,
         )
 
 

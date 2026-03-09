@@ -467,6 +467,7 @@ class SkillEffectInUseBase(BaseResModelWithOptionalId):
     """描述一条“使用中的”技能效果"""
 
     info: str = Field(description='技能效果描述')
+    analyze_info: str = Field(description='新版 Unity 端采用的格式化技能效果描述文本')
     args: list[int | float] | list[int] | list[float] = Field(
         description='技能效果参数列表',
         sa_type=JSON,
@@ -495,6 +496,7 @@ class SkillEffectInUse(
             effect_id=self.effect.id,
             args=self.args,
             info=self.info,
+            analyze_info=self.analyze_info,
         )
 
 
