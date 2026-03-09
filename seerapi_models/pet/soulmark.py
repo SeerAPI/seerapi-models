@@ -11,7 +11,7 @@ from seerapi_models.build_model import (
 from seerapi_models.common import EidEffectInUse, EidEffectInUseORM, ResourceRef
 
 if TYPE_CHECKING:
-    from .pet import Pet, PetORM
+    from .pet import Pet, PetAdvance, PetAdvanceORM, PetORM
 
 
 class PetSoulmarkLink(SQLModel, table=True):
@@ -69,6 +69,10 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
             'validation_alias': AliasChoices('from', 'from_'),
         },
     )
+    advance: ResourceRef['PetAdvance'] | None = Field(
+        default=None,
+        description='觉醒后的魂印资源，该字段仅在该魂印是神谕觉醒魂印时有效',
+    )
 
     @classmethod
     def get_orm_model(cls) -> type['SoulmarkORM']:
@@ -117,6 +121,12 @@ class SoulmarkORM(SoulmarkBase, table=True):
             'foreign_keys': '[SoulmarkORM.intensified_to_id]',
             'primaryjoin': 'SoulmarkORM.intensified_to_id == SoulmarkORM.id',
             'remote_side': 'SoulmarkORM.id',
+            'uselist': False,
+        },
+    )
+    advance: Optional['PetAdvanceORM'] = Relationship(
+        back_populates='soulmark',
+        sa_relationship_kwargs={
             'uselist': False,
         },
     )

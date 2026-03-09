@@ -15,6 +15,7 @@ from .pet import (
     SkillInPetORM,
     YieldingEvORM,
 )
+from .pet_advance import PetAdvance, PetAdvanceORM
 from .pet_skin import PetSkin, PetSkinCategory, PetSkinCategoryORM, PetSkinORM
 from .petbook import (
     PetArchiveStoryBook,
@@ -30,6 +31,8 @@ __all__ = [
     'BaseStatORM',
     'DiyStatsRangeORM',
     'Pet',
+    'PetAdvance',
+    'PetAdvanceORM',
     'PetArchiveStoryBook',
     'PetArchiveStoryBookORM',
     'PetArchiveStoryEntry',
