@@ -34,7 +34,11 @@ class SoulmarkBase(BaseResModel):
     desc: str = Field(description='魂印描述')
     desc_formatting_adjustment: str | None = Field(
         default=None,
-        description='魂印描述的"可格式化版本"，用于呈现Unity端中的描述排版形式',
+        description='Unity 客户端历史格式的魂印描述文本（部分旧魂印专用，应优先使用 analyze_desc 字段）',
+    )
+    analyze_desc: str | None = Field(
+        default=None,
+        description='当前 Unity 端采用的格式化魂印描述文本',
     )
     pve_effective: bool | None = Field(
         default=None,
@@ -88,6 +92,7 @@ class Soulmark(SoulmarkBase, ConvertToORM['SoulmarkORM']):
             intensified_to_id=self.intensified_to.id if self.intensified_to else None,
             desc_formatting_adjustment=self.desc_formatting_adjustment,
             pve_effective=self.pve_effective,
+            analyze_desc=self.analyze_desc,
         )
 
 

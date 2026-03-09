@@ -31,6 +31,7 @@ from .element_type import (
     TypeCombination,
     TypeCombinationORM,
 )
+from .glossary import GlossaryEntry, GlossaryEntryORM
 from .items import (
     EnergyBead,
     EnergyBeadBuffAttrORM,
@@ -200,6 +201,8 @@ __all__ = [
     'GemGenCategory',
     'GemGenCategoryORM',
     'GemORM',
+    'GlossaryEntry',
+    'GlossaryEntryORM',
     'Item',
     'ItemCategory',
     'ItemCategoryORM',
