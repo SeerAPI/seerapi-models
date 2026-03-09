@@ -27,6 +27,8 @@ if TYPE_CHECKING:
     from seerapi_models.skill import Skill, SkillORM
 
     from . import (
+        PetAdvance,
+        PetAdvanceORM,
         PetArchiveStoryEntry,
         PetArchiveStoryEntryORM,
         PetEncyclopediaEntry,
@@ -216,6 +218,9 @@ class Pet(PetBase, ConvertToORM['PetORM']):
     peak_expert_pool: ResourceRef['PeakExpertPool'] | None = Field(
         default=None, description='精灵所属巅峰专家池'
     )
+    advance: ResourceRef['PetAdvance'] | None = Field(
+        default=None, description='精灵觉醒信息'
+    )
 
     @classmethod
     def get_orm_model(cls) -> 'type[PetORM]':
@@ -367,6 +372,12 @@ class PetORM(PetBase, table=True):
         default=None, foreign_key='peak_expert_pool.id'
     )
     peak_expert_pool: Optional['PeakExpertPoolORM'] = Relationship(back_populates='pet')
+    advance: Optional['PetAdvanceORM'] = Relationship(
+        back_populates='pet',
+        sa_relationship_kwargs={
+            'uselist': False,
+        },
+    )
 
 
 class PetClassBase(BaseResModel):

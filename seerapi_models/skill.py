@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlmodel import JSON, Field, Relationship, SQLModel
 
@@ -13,7 +13,7 @@ from .common import ResourceRef, SkillEffectInUse, SkillEffectInUseORM
 if TYPE_CHECKING:
     from .element_type import TypeCombination, TypeCombinationORM
     from .mintmark import MintmarkORM
-    from .pet import Pet, SkillInPetORM
+    from .pet import Pet, PetAdvance, PetAdvanceORM, SkillInPetORM
 
 
 class SkillEffectLink(SQLModel, table=True):
@@ -285,9 +285,10 @@ class Skill(SkillBase, ConvertToORM['SkillORM']):
     hide_effect: ResourceRef[SkillHideEffect] | None = Field(
         default=None, description='技能隐藏效果'
     )
-    # mintmark: list[ResourceRef['SkillMintmark']] = Field(
-    # 	default_factory=list, description='技能刻印列表'
-    # )
+    advance: ResourceRef['PetAdvance'] | None = Field(
+        default=None,
+        description='技能觉醒信息，仅在该技能是通过神谕觉醒开启的技能时生效',
+    )
 
     @classmethod
     def get_orm_model(cls) -> 'type[SkillORM]':
@@ -308,6 +309,7 @@ class Skill(SkillBase, ConvertToORM['SkillORM']):
             type_id=self.type.id,
             hide_effect_id=self.hide_effect.id if self.hide_effect else None,
             atk_num=self.atk_num,
+            advance_id=self.advance.id if self.advance else None,
         )
 
 
@@ -336,3 +338,6 @@ class SkillORM(SkillBase, table=True):
     pet_links: list['SkillInPetORM'] = Relationship(
         back_populates='skill',
     )
+
+    advance_id: int | None = Field(default=None, foreign_key='pet_advance.id')
+    advance: Optional['PetAdvanceORM'] = Relationship(back_populates='skill')
