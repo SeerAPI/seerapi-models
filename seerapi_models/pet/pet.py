@@ -220,6 +220,9 @@ class Pet(PetBase, ConvertToORM['PetORM']):
     peak_expert_pool: ResourceRef['PeakExpertPool'] | None = Field(
         default=None, description='精灵所属巅峰专家池'
     )
+    peak_pool_vote_id: int | None = Field(
+        default=None, description='精灵所属巅峰池票选ID', exclude=True
+    )
     advance: ResourceRef['PetAdvance'] | None = Field(
         default=None, description='精灵觉醒信息'
     )
@@ -282,6 +285,7 @@ class Pet(PetBase, ConvertToORM['PetORM']):
             peak_expert_pool_id=self.peak_expert_pool.id
             if self.peak_expert_pool
             else None,
+            peak_pool_vote_id=self.peak_pool_vote_id,
         )
 
 
