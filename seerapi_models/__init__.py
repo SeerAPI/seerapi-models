@@ -31,6 +31,7 @@ from .element_type import (
     TypeCombination,
     TypeCombinationORM,
 )
+from .error_code import ErrorCode, ErrorCodeORM
 from .glossary import GlossaryEntry, GlossaryEntryORM
 from .items import (
     EnergyBead,
@@ -193,6 +194,8 @@ __all__ = [
     'EquipORM',
     'EquipType',
     'EquipTypeORM',
+    'ErrorCode',
+    'ErrorCodeORM',
     'Gem',
     'GemCategory',
     'GemCategoryORM',
