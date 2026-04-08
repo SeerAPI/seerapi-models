@@ -100,6 +100,8 @@ from .peak_pool import (
     PeakExpertPoolORM,
     PeakPool,
     PeakPoolORM,
+    PeakPoolVote,
+    PeakPoolVoteORM,
 )
 from .pet import (
     BaseStatORM,
@@ -225,6 +227,8 @@ __all__ = [
     'PeakExpertPoolORM',
     'PeakPool',
     'PeakPoolORM',
+    'PeakPoolVote',
+    'PeakPoolVoteORM',
     'Pet',
     'PetAdvance',
     'PetAdvanceORM',
