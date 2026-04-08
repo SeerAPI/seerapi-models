@@ -24,6 +24,7 @@ if TYPE_CHECKING:
         PeakExpertPoolORM,
         PeakPool,
         PeakPoolORM,
+        PeakPoolVoteORM,
     )
     from seerapi_models.skill import Skill, SkillORM
 
@@ -373,6 +374,8 @@ class PetORM(PetBase, table=True):
         default=None, foreign_key='peak_expert_pool.id'
     )
     peak_expert_pool: Optional['PeakExpertPoolORM'] = Relationship(back_populates='pet')
+    peak_pool_vote_id: int | None = Field(default=None, foreign_key='peak_pool_vote.id')
+    peak_pool_vote: Optional['PeakPoolVoteORM'] = Relationship(back_populates='pet')
     advance: Optional['PetAdvanceORM'] = Relationship(
         back_populates='pet',
         sa_relationship_kwargs={
