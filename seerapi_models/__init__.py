@@ -110,6 +110,7 @@ from .mintmark import (
     UniversalPartORM,
 )
 from .nature import Nature, NatureAttrORM, NatureORM
+from .peak import PeakSeason, PeakSeasonORM
 from .peak_pool import (
     PeakExpertPool,
     PeakExpertPoolORM,
@@ -258,6 +259,8 @@ __all__ = [
     'PeakPoolORM',
     'PeakPoolVote',
     'PeakPoolVoteORM',
+    'PeakSeason',
+    'PeakSeasonORM',
     'Pet',
     'PetAdvance',
     'PetAdvanceORM',
