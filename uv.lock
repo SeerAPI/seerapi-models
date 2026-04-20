@@ -282,7 +282,7 @@ wheels = [
 
 [[package]]
 name = "seerapi-models"
-version = "105.0.0"
+version = "105.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "pydantic" },
